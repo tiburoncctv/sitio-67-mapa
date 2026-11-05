@@ -1,0 +1,718 @@
+{
+ "floors": [
+  {
+   "id": "S",
+   "short": "S",
+   "name": "Superficie",
+   "title": "Superficie · acceso y extracción",
+   "svg": "assets/maps/S-plano.svg"
+  },
+  {
+   "id": "N1",
+   "short": "−1",
+   "name": "Nivel −1",
+   "title": "Nivel −1 · seguridad y operaciones",
+   "svg": "assets/maps/N1-plano.svg"
+  },
+  {
+   "id": "N2",
+   "short": "−2",
+   "name": "Nivel −2",
+   "title": "Nivel −2 · investigación y respuesta",
+   "svg": "assets/maps/N2-plano.svg"
+  },
+  {
+   "id": "N3",
+   "short": "−3",
+   "name": "Nivel −3",
+   "title": "Nivel −3 · servicios y contención",
+   "svg": "assets/maps/N3-plano.svg"
+  }
+ ],
+ "rooms": [
+  {
+   "id": "S01",
+   "floor": "S",
+   "code": "S01",
+   "name": "Control exterior",
+   "desc": "identificación y acceso.",
+   "shape": {
+    "type": "rect",
+    "x": 60.0,
+    "y": 95.0,
+    "w": 135.0,
+    "h": 140.0
+   },
+   "badge": [
+    66.0,
+    101.0
+   ]
+  },
+  {
+   "id": "S02",
+   "floor": "S",
+   "code": "S02",
+   "name": "Hangar",
+   "desc": "apoyo aeronáutico.",
+   "shape": {
+    "type": "rect",
+    "x": 220.0,
+    "y": 95.0,
+    "w": 175.0,
+    "h": 140.0
+   },
+   "badge": [
+    226.0,
+    101.0
+   ]
+  },
+  {
+   "id": "S03",
+   "floor": "S",
+   "code": "S03",
+   "name": "Helipunto",
+   "desc": "aterrizaje y recogida.",
+   "shape": {
+    "type": "rect",
+    "x": 412.0,
+    "y": 95.0,
+    "w": 175.0,
+    "h": 140.0
+   },
+   "badge": [
+    418.0,
+    101.0
+   ]
+  },
+  {
+   "id": "S04",
+   "floor": "S",
+   "code": "S04",
+   "name": "Descontaminación exterior",
+   "desc": "revisión antes de salir.",
+   "shape": {
+    "type": "rect",
+    "x": 604.0,
+    "y": 95.0,
+    "w": 175.0,
+    "h": 140.0
+   },
+   "badge": [
+    610.0,
+    101.0
+   ]
+  },
+  {
+   "id": "S05",
+   "floor": "S",
+   "code": "S05",
+   "name": "Cuarentena exterior",
+   "desc": "aislamiento de personal expuesto.",
+   "shape": {
+    "type": "rect",
+    "x": 805.0,
+    "y": 95.0,
+    "w": 135.0,
+    "h": 140.0
+   },
+   "badge": [
+    811.0,
+    101.0
+   ]
+  },
+  {
+   "id": "S06",
+   "floor": "S",
+   "code": "S06",
+   "name": "Taller",
+   "desc": "herramientas y mantenimiento.",
+   "shape": {
+    "type": "rect",
+    "x": 60.0,
+    "y": 375.0,
+    "w": 135.0,
+    "h": 170.0
+   },
+   "badge": [
+    66.0,
+    381.0
+   ]
+  },
+  {
+   "id": "S07",
+   "floor": "S",
+   "code": "S07",
+   "name": "Carga y suministros",
+   "desc": "recepción de materiales.",
+   "shape": {
+    "type": "rect",
+    "x": 220.0,
+    "y": 375.0,
+    "w": 175.0,
+    "h": 170.0
+   },
+   "badge": [
+    226.0,
+    381.0
+   ]
+  },
+  {
+   "id": "S08",
+   "floor": "S",
+   "code": "S08",
+   "name": "Vehículos",
+   "desc": "transporte terrestre.",
+   "shape": {
+    "type": "rect",
+    "x": 412.0,
+    "y": 375.0,
+    "w": 175.0,
+    "h": 170.0
+   },
+   "badge": [
+    418.0,
+    381.0
+   ]
+  },
+  {
+   "id": "S09",
+   "floor": "S",
+   "code": "S09",
+   "name": "Apoyo médico",
+   "desc": "asistencia de campo.",
+   "shape": {
+    "type": "rect",
+    "x": 604.0,
+    "y": 375.0,
+    "w": 175.0,
+    "h": 170.0
+   },
+   "badge": [
+    610.0,
+    381.0
+   ]
+  },
+  {
+   "id": "S10",
+   "floor": "S",
+   "code": "S10",
+   "name": "Acceso terrestre",
+   "desc": "conexión con el perímetro.",
+   "shape": {
+    "type": "rect",
+    "x": 805.0,
+    "y": 375.0,
+    "w": 135.0,
+    "h": 170.0
+   },
+   "badge": [
+    811.0,
+    381.0
+   ]
+  },
+  {
+   "id": "101",
+   "floor": "N1",
+   "code": "101",
+   "name": "Comunicaciones",
+   "desc": "radio y enlace con mando.",
+   "shape": {
+    "type": "rect",
+    "x": 60.0,
+    "y": 95.0,
+    "w": 135.0,
+    "h": 140.0
+   },
+   "badge": [
+    66.0,
+    101.0
+   ]
+  },
+  {
+   "id": "102",
+   "floor": "N1",
+   "code": "102",
+   "name": "Seguridad",
+   "desc": "control de puertas y cámaras.",
+   "shape": {
+    "type": "rect",
+    "x": 220.0,
+    "y": 95.0,
+    "w": 175.0,
+    "h": 140.0
+   },
+   "badge": [
+    226.0,
+    101.0
+   ]
+  },
+  {
+   "id": "103",
+   "floor": "N1",
+   "code": "103",
+   "name": "Operaciones",
+   "desc": "coordinación del sitio.",
+   "shape": {
+    "type": "rect",
+    "x": 412.0,
+    "y": 95.0,
+    "w": 175.0,
+    "h": 140.0
+   },
+   "badge": [
+    418.0,
+    101.0
+   ]
+  },
+  {
+   "id": "104",
+   "floor": "N1",
+   "code": "104",
+   "name": "Enfermería",
+   "desc": "atención al personal.",
+   "shape": {
+    "type": "rect",
+    "x": 604.0,
+    "y": 95.0,
+    "w": 175.0,
+    "h": 140.0
+   },
+   "badge": [
+    610.0,
+    101.0
+   ]
+  },
+  {
+   "id": "105",
+   "floor": "N1",
+   "code": "105",
+   "name": "Cuarentena",
+   "desc": "aislamiento clínico interno.",
+   "shape": {
+    "type": "rect",
+    "x": 805.0,
+    "y": 95.0,
+    "w": 135.0,
+    "h": 140.0
+   },
+   "badge": [
+    811.0,
+    101.0
+   ]
+  },
+  {
+   "id": "106",
+   "floor": "N1",
+   "code": "106",
+   "name": "Vestuario",
+   "desc": "cambio y equipo de protección.",
+   "shape": {
+    "type": "rect",
+    "x": 60.0,
+    "y": 375.0,
+    "w": 135.0,
+    "h": 170.0
+   },
+   "badge": [
+    66.0,
+    381.0
+   ]
+  },
+  {
+   "id": "107",
+   "floor": "N1",
+   "code": "107",
+   "name": "Descanso",
+   "desc": "área del personal.",
+   "shape": {
+    "type": "rect",
+    "x": 220.0,
+    "y": 375.0,
+    "w": 175.0,
+    "h": 170.0
+   },
+   "badge": [
+    226.0,
+    381.0
+   ]
+  },
+  {
+   "id": "108",
+   "floor": "N1",
+   "code": "108",
+   "name": "Logística",
+   "desc": "suministros operativos.",
+   "shape": {
+    "type": "rect",
+    "x": 412.0,
+    "y": 375.0,
+    "w": 175.0,
+    "h": 170.0
+   },
+   "badge": [
+    418.0,
+    381.0
+   ]
+  },
+  {
+   "id": "109",
+   "floor": "N1",
+   "code": "109",
+   "name": "Descontaminación",
+   "desc": "transición hacia sectores biológicos.",
+   "shape": {
+    "type": "rect",
+    "x": 604.0,
+    "y": 375.0,
+    "w": 175.0,
+    "h": 170.0
+   },
+   "badge": [
+    610.0,
+    381.0
+   ]
+  },
+  {
+   "id": "110",
+   "floor": "N1",
+   "code": "110",
+   "name": "Servicios",
+   "desc": "instalaciones auxiliares.",
+   "shape": {
+    "type": "rect",
+    "x": 805.0,
+    "y": 375.0,
+    "w": 135.0,
+    "h": 170.0
+   },
+   "badge": [
+    811.0,
+    381.0
+   ]
+  },
+  {
+   "id": "201",
+   "floor": "N2",
+   "code": "201",
+   "name": "Soporte",
+   "desc": "herramientas y apoyo técnico.",
+   "shape": {
+    "type": "rect",
+    "x": 60.0,
+    "y": 95.0,
+    "w": 135.0,
+    "h": 140.0
+   },
+   "badge": [
+    66.0,
+    101.0
+   ]
+  },
+  {
+   "id": "202",
+   "floor": "N2",
+   "code": "202",
+   "name": "Archivo",
+   "desc": "registros y almacenamiento de datos.",
+   "shape": {
+    "type": "rect",
+    "x": 220.0,
+    "y": 95.0,
+    "w": 175.0,
+    "h": 140.0
+   },
+   "badge": [
+    226.0,
+    101.0
+   ]
+  },
+  {
+   "id": "203",
+   "floor": "N2",
+   "code": "203",
+   "name": "Análisis",
+   "desc": "estudio instrumental de muestras.",
+   "shape": {
+    "type": "rect",
+    "x": 412.0,
+    "y": 95.0,
+    "w": 175.0,
+    "h": 140.0
+   },
+   "badge": [
+    418.0,
+    101.0
+   ]
+  },
+  {
+   "id": "204",
+   "floor": "N2",
+   "code": "204",
+   "name": "Cultivos",
+   "desc": "conservación y observación de muestras.",
+   "shape": {
+    "type": "rect",
+    "x": 604.0,
+    "y": 95.0,
+    "w": 175.0,
+    "h": 140.0
+   },
+   "badge": [
+    610.0,
+    101.0
+   ]
+  },
+  {
+   "id": "205",
+   "floor": "N2",
+   "code": "205",
+   "name": "Transferencia",
+   "desc": "esclusa de carga biológica.",
+   "shape": {
+    "type": "rect",
+    "x": 805.0,
+    "y": 95.0,
+    "w": 135.0,
+    "h": 140.0
+   },
+   "badge": [
+    811.0,
+    101.0
+   ]
+  },
+  {
+   "id": "206",
+   "floor": "N2",
+   "code": "206",
+   "name": "Reserva técnica",
+   "desc": "material auxiliar.",
+   "shape": {
+    "type": "rect",
+    "x": 60.0,
+    "y": 375.0,
+    "w": 135.0,
+    "h": 170.0
+   },
+   "badge": [
+    66.0,
+    381.0
+   ]
+  },
+  {
+   "id": "207",
+   "floor": "N2",
+   "code": "207",
+   "name": "Armería",
+   "desc": "armamento y equipo de contención.",
+   "shape": {
+    "type": "rect",
+    "x": 220.0,
+    "y": 375.0,
+    "w": 175.0,
+    "h": 170.0
+   },
+   "badge": [
+    226.0,
+    381.0
+   ]
+  },
+  {
+   "id": "208",
+   "floor": "N2",
+   "code": "208",
+   "name": "Preparación",
+   "desc": "acondicionamiento de personal y materiales.",
+   "shape": {
+    "type": "rect",
+    "x": 412.0,
+    "y": 375.0,
+    "w": 175.0,
+    "h": 170.0
+   },
+   "badge": [
+    418.0,
+    381.0
+   ]
+  },
+  {
+   "id": "209",
+   "floor": "N2",
+   "code": "209",
+   "name": "Observación",
+   "desc": "supervisión del laboratorio tras cristal.",
+   "shape": {
+    "type": "rect",
+    "x": 604.0,
+    "y": 375.0,
+    "w": 175.0,
+    "h": 170.0
+   },
+   "badge": [
+    610.0,
+    381.0
+   ]
+  },
+  {
+   "id": "210",
+   "floor": "N2",
+   "code": "210",
+   "name": "Residuos",
+   "desc": "transferencia sellada a tratamiento.",
+   "shape": {
+    "type": "rect",
+    "x": 805.0,
+    "y": 375.0,
+    "w": 135.0,
+    "h": 170.0
+   },
+   "badge": [
+    811.0,
+    381.0
+   ]
+  },
+  {
+   "id": "301",
+   "floor": "N3",
+   "code": "301",
+   "name": "Energía",
+   "desc": "alimentación y controles auxiliares.",
+   "shape": {
+    "type": "rect",
+    "x": 60.0,
+    "y": 95.0,
+    "w": 135.0,
+    "h": 140.0
+   },
+   "badge": [
+    66.0,
+    101.0
+   ]
+  },
+  {
+   "id": "302",
+   "floor": "N3",
+   "code": "302",
+   "name": "Bombas",
+   "desc": "circulación y aislamiento de líquidos.",
+   "shape": {
+    "type": "rect",
+    "x": 220.0,
+    "y": 95.0,
+    "w": 175.0,
+    "h": 140.0
+   },
+   "badge": [
+    226.0,
+    101.0
+   ]
+  },
+  {
+   "id": "303",
+   "floor": "N3",
+   "code": "303",
+   "name": "Control de emergencia",
+   "desc": "gestión local de sistemas críticos.",
+   "shape": {
+    "type": "rect",
+    "x": 412.0,
+    "y": 95.0,
+    "w": 175.0,
+    "h": 140.0
+   },
+   "badge": [
+    418.0,
+    101.0
+   ]
+  },
+  {
+   "id": "304",
+   "floor": "N3",
+   "code": "304",
+   "name": "Tratamiento",
+   "desc": "procesamiento de residuos biológicos.",
+   "shape": {
+    "type": "rect",
+    "x": 604.0,
+    "y": 95.0,
+    "w": 175.0,
+    "h": 140.0
+   },
+   "badge": [
+    610.0,
+    101.0
+   ]
+  },
+  {
+   "id": "305",
+   "floor": "N3",
+   "code": "305",
+   "name": "Ventilación",
+   "desc": "control y aislamiento de aire.",
+   "shape": {
+    "type": "rect",
+    "x": 805.0,
+    "y": 95.0,
+    "w": 135.0,
+    "h": 140.0
+   },
+   "badge": [
+    811.0,
+    101.0
+   ]
+  },
+  {
+   "id": "306",
+   "floor": "N3",
+   "code": "306",
+   "name": "Refugio de servicio",
+   "desc": "resguardo temporal del personal.",
+   "shape": {
+    "type": "rect",
+    "x": 60.0,
+    "y": 375.0,
+    "w": 135.0,
+    "h": 170.0
+   },
+   "badge": [
+    66.0,
+    381.0
+   ]
+  },
+  {
+   "id": "307",
+   "floor": "N3",
+   "code": "307",
+   "name": "Cámara de contención",
+   "desc": "recinto principal y terminales C1/C2.",
+   "shape": {
+    "type": "rect",
+    "x": 220.0,
+    "y": 375.0,
+    "w": 559.0,
+    "h": 170.0
+   },
+   "badge": [
+    226.0,
+    381.0
+   ]
+  },
+  {
+   "id": "310",
+   "floor": "N3",
+   "code": "310",
+   "name": "Servicio B",
+   "desc": "conexión con el núcleo vertical B.",
+   "shape": {
+    "type": "rect",
+    "x": 805.0,
+    "y": 375.0,
+    "w": 135.0,
+    "h": 170.0
+   },
+   "badge": [
+    811.0,
+    381.0
+   ]
+  }
+ ]
+}

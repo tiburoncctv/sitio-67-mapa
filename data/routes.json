@@ -1,0 +1,2316 @@
+{
+ "mapVersion": "sitio67-planos-1.0",
+ "routes": [
+  {
+   "id": "acc-S01",
+   "floor": "S",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso S01",
+   "desc": "Acceso de S01 · Control exterior al patio de servicio.",
+   "shape": {
+    "type": "rect",
+    "x": 111.5,
+    "y": 235,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    145.5,
+    239
+   ]
+  },
+  {
+   "id": "acc-S02",
+   "floor": "S",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso S02",
+   "desc": "Acceso de S02 · Hangar al patio de servicio.",
+   "shape": {
+    "type": "rect",
+    "x": 291.5,
+    "y": 235,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    325.5,
+    239
+   ]
+  },
+  {
+   "id": "acc-S03",
+   "floor": "S",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso S03",
+   "desc": "Acceso de S03 · Helipunto al patio de servicio.",
+   "shape": {
+    "type": "rect",
+    "x": 483.5,
+    "y": 235,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    517.5,
+    239
+   ]
+  },
+  {
+   "id": "acc-S04",
+   "floor": "S",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso S04",
+   "desc": "Acceso de S04 · Descontaminación exterior al patio de servicio.",
+   "shape": {
+    "type": "rect",
+    "x": 675.5,
+    "y": 235,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    709.5,
+    239
+   ]
+  },
+  {
+   "id": "acc-S05",
+   "floor": "S",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso S05",
+   "desc": "Acceso de S05 · Cuarentena exterior al patio de servicio.",
+   "shape": {
+    "type": "rect",
+    "x": 856.5,
+    "y": 235,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    890.5,
+    239
+   ]
+  },
+  {
+   "id": "acc-S06",
+   "floor": "S",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso S06",
+   "desc": "Acceso de S06 · Taller al patio de servicio.",
+   "shape": {
+    "type": "rect",
+    "x": 111.5,
+    "y": 350,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    145.5,
+    356
+   ]
+  },
+  {
+   "id": "acc-S07",
+   "floor": "S",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso S07",
+   "desc": "Acceso de S07 · Carga y suministros al patio de servicio.",
+   "shape": {
+    "type": "rect",
+    "x": 291.5,
+    "y": 350,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    325.5,
+    356
+   ]
+  },
+  {
+   "id": "acc-S08",
+   "floor": "S",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso S08",
+   "desc": "Acceso de S08 · Vehículos al patio de servicio.",
+   "shape": {
+    "type": "rect",
+    "x": 483.5,
+    "y": 350,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    517.5,
+    356
+   ]
+  },
+  {
+   "id": "acc-S09",
+   "floor": "S",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso S09",
+   "desc": "Acceso de S09 · Apoyo médico al patio de servicio.",
+   "shape": {
+    "type": "rect",
+    "x": 675.5,
+    "y": 350,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    709.5,
+    356
+   ]
+  },
+  {
+   "id": "acc-S10",
+   "floor": "S",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso S10",
+   "desc": "Acceso de S10 · Acceso terrestre al patio de servicio.",
+   "shape": {
+    "type": "rect",
+    "x": 856.5,
+    "y": 350,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    890.5,
+    356
+   ]
+  },
+  {
+   "id": "s-pasillo-o",
+   "floor": "S",
+   "kind": "route",
+   "group": "corridor",
+   "name": "Patio de servicio · tramo oeste",
+   "desc": "Tramo del patio de servicio, donde desembocan A y B.",
+   "shape": {
+    "type": "rect",
+    "x": 195,
+    "y": 260,
+    "w": 208.5,
+    "h": 90
+   },
+   "badge": [
+    269.25,
+    266
+   ]
+  },
+  {
+   "id": "s-pasillo-c",
+   "floor": "S",
+   "kind": "route",
+   "group": "corridor",
+   "name": "Patio de servicio · tramo central",
+   "desc": "Tramo del patio de servicio, donde desembocan A y B.",
+   "shape": {
+    "type": "rect",
+    "x": 403.5,
+    "y": 260,
+    "w": 192.0,
+    "h": 90
+   },
+   "badge": [
+    469.5,
+    266
+   ]
+  },
+  {
+   "id": "s-pasillo-e",
+   "floor": "S",
+   "kind": "route",
+   "group": "corridor",
+   "name": "Patio de servicio · tramo este",
+   "desc": "Tramo del patio de servicio, donde desembocan A y B.",
+   "shape": {
+    "type": "rect",
+    "x": 595.5,
+    "y": 260,
+    "w": 209.5,
+    "h": 90
+   },
+   "badge": [
+    670.25,
+    266
+   ]
+  },
+  {
+   "id": "s-A",
+   "floor": "S",
+   "kind": "core",
+   "core": "A",
+   "name": "A · núcleo vertical",
+   "desc": "A: escalera y ascensor de personal.",
+   "shape": {
+    "type": "rect",
+    "x": 60,
+    "y": 260,
+    "w": 135,
+    "h": 90
+   },
+   "parts": [
+    "s-A-esc",
+    "s-A-asc"
+   ]
+  },
+  {
+   "id": "s-B",
+   "floor": "S",
+   "kind": "core",
+   "core": "B",
+   "name": "B · núcleo vertical",
+   "desc": "B: escalera protegida y montacargas separados.",
+   "shape": {
+    "type": "rect",
+    "x": 805,
+    "y": 260,
+    "w": 135,
+    "h": 90
+   },
+   "parts": [
+    "s-B-esc",
+    "s-B-carga"
+   ]
+  },
+  {
+   "id": "s-A-esc",
+   "floor": "S",
+   "kind": "transport",
+   "core": "A",
+   "chip": "ESC.",
+   "name": "A · escalera",
+   "desc": "Escalera del núcleo A.",
+   "shape": {
+    "type": "rect",
+    "x": 70,
+    "y": 326,
+    "w": 54,
+    "h": 19
+   }
+  },
+  {
+   "id": "s-A-asc",
+   "floor": "S",
+   "kind": "transport",
+   "core": "A",
+   "chip": "ASC.",
+   "name": "A · ascensor de personal",
+   "desc": "Ascensor de personal del núcleo A.",
+   "shape": {
+    "type": "rect",
+    "x": 131,
+    "y": 326,
+    "w": 54,
+    "h": 19
+   }
+  },
+  {
+   "id": "s-B-esc",
+   "floor": "S",
+   "kind": "transport",
+   "core": "B",
+   "chip": "ESC.",
+   "name": "B · escalera protegida",
+   "desc": "Escalera protegida del núcleo B, en recinto separado del montacargas.",
+   "shape": {
+    "type": "rect",
+    "x": 815,
+    "y": 326,
+    "w": 54,
+    "h": 19
+   }
+  },
+  {
+   "id": "s-B-carga",
+   "floor": "S",
+   "kind": "transport",
+   "core": "B",
+   "chip": "CARGA",
+   "name": "B · montacargas",
+   "desc": "Montacargas del núcleo B, en recinto separado de la escalera.",
+   "shape": {
+    "type": "rect",
+    "x": 876,
+    "y": 326,
+    "w": 54,
+    "h": 19
+   }
+  },
+  {
+   "id": "s-A-ent-pasillo",
+   "floor": "S",
+   "kind": "route",
+   "group": "entry",
+   "name": "Entrada a A desde el patio de servicio",
+   "desc": "Puerta entre A y el patio de servicio.",
+   "shape": {
+    "type": "rect",
+    "x": 188,
+    "y": 289,
+    "w": 14,
+    "h": 32
+   },
+   "badge": [
+    173,
+    273
+   ]
+  },
+  {
+   "id": "s-A-ent-vial",
+   "floor": "S",
+   "kind": "route",
+   "group": "entry",
+   "name": "Entrada a A desde el vial perimetral",
+   "desc": "Puerta entre A y el vial perimetral.",
+   "shape": {
+    "type": "rect",
+    "x": 53,
+    "y": 289,
+    "w": 14,
+    "h": 32
+   },
+   "badge": [
+    38,
+    273
+   ]
+  },
+  {
+   "id": "s-B-ent-pasillo",
+   "floor": "S",
+   "kind": "route",
+   "group": "entry",
+   "name": "Entrada a B desde el patio de servicio",
+   "desc": "Puerta entre B y el patio de servicio.",
+   "shape": {
+    "type": "rect",
+    "x": 798,
+    "y": 289,
+    "w": 14,
+    "h": 32
+   },
+   "badge": [
+    783,
+    273
+   ]
+  },
+  {
+   "id": "s-B-ent-vial",
+   "floor": "S",
+   "kind": "route",
+   "group": "entry",
+   "name": "Entrada a B desde el vial perimetral",
+   "desc": "Puerta entre B y el vial perimetral.",
+   "shape": {
+    "type": "rect",
+    "x": 933,
+    "y": 289,
+    "w": 14,
+    "h": 32
+   },
+   "badge": [
+    918,
+    273
+   ]
+  },
+  {
+   "id": "s-vial-o",
+   "floor": "S",
+   "kind": "route",
+   "group": "vial",
+   "name": "Vial perimetral · tramo oeste (lado A)",
+   "desc": "Tramo del vial perimetral que rodea el patio y enlaza con E.",
+   "shape": {
+    "type": "line",
+    "points": [
+     [
+      60,
+      305
+     ],
+     [
+      42,
+      305
+     ],
+     [
+      42,
+      575
+     ]
+    ],
+    "width": 22
+   },
+   "badge": [
+    48,
+    430
+   ]
+  },
+  {
+   "id": "s-vial-so",
+   "floor": "S",
+   "kind": "route",
+   "group": "vial",
+   "name": "Vial perimetral · tramo sur-oeste",
+   "desc": "Tramo del vial perimetral que rodea el patio y enlaza con E.",
+   "shape": {
+    "type": "line",
+    "points": [
+     [
+      42,
+      575
+     ],
+     [
+      330,
+      575
+     ]
+    ],
+    "width": 22
+   },
+   "badge": [
+    160,
+    568
+   ]
+  },
+  {
+   "id": "s-vial-sc",
+   "floor": "S",
+   "kind": "route",
+   "group": "vial",
+   "name": "Vial perimetral · tramo sur-central",
+   "desc": "Tramo del vial perimetral que rodea el patio y enlaza con E.",
+   "shape": {
+    "type": "line",
+    "points": [
+     [
+      330,
+      575
+     ],
+     [
+      670,
+      575
+     ]
+    ],
+    "width": 22
+   },
+   "badge": [
+    470,
+    568
+   ]
+  },
+  {
+   "id": "s-vial-se",
+   "floor": "S",
+   "kind": "route",
+   "group": "vial",
+   "name": "Vial perimetral · tramo sur-este",
+   "desc": "Tramo del vial perimetral que rodea el patio y enlaza con E.",
+   "shape": {
+    "type": "line",
+    "points": [
+     [
+      670,
+      575
+     ],
+     [
+      958,
+      575
+     ]
+    ],
+    "width": 22
+   },
+   "badge": [
+    780,
+    568
+   ]
+  },
+  {
+   "id": "s-vial-e",
+   "floor": "S",
+   "kind": "route",
+   "group": "vial",
+   "name": "Vial perimetral · tramo este (lado B)",
+   "desc": "Tramo del vial perimetral que rodea el patio y enlaza con E.",
+   "shape": {
+    "type": "line",
+    "points": [
+     [
+      958,
+      575
+     ],
+     [
+      958,
+      305
+     ],
+     [
+      940,
+      305
+     ]
+    ],
+    "width": 22
+   },
+   "badge": [
+    890,
+    430
+   ]
+  },
+  {
+   "id": "s-E",
+   "floor": "S",
+   "kind": "route",
+   "group": "e",
+   "name": "E · acceso terrestre",
+   "desc": "E: acceso terrestre al perímetro exterior.",
+   "shape": {
+    "type": "line",
+    "points": [
+     [
+      958,
+      575
+     ],
+     [
+      996,
+      575
+     ]
+    ],
+    "width": 16
+   },
+   "badge": [
+    940,
+    590
+   ]
+  },
+  {
+   "id": "s-entrada-servicio",
+   "floor": "S",
+   "kind": "route",
+   "group": "service",
+   "name": "Entrada de servicio",
+   "desc": "Entrada de servicio representada bajo S07, cruzando el vial perimetral.",
+   "shape": {
+    "type": "line",
+    "points": [
+     [
+      307,
+      545
+     ],
+     [
+      307,
+      622
+     ]
+    ],
+    "width": 14
+   },
+   "badge": [
+    314,
+    600
+   ]
+  },
+  {
+   "id": "acc-101",
+   "floor": "N1",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso 101",
+   "desc": "Acceso de 101 · Comunicaciones al pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 111.5,
+    "y": 235,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    145.5,
+    239
+   ]
+  },
+  {
+   "id": "acc-102",
+   "floor": "N1",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso 102",
+   "desc": "Acceso de 102 · Seguridad al pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 291.5,
+    "y": 235,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    325.5,
+    239
+   ]
+  },
+  {
+   "id": "acc-103",
+   "floor": "N1",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso 103",
+   "desc": "Acceso de 103 · Operaciones al pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 483.5,
+    "y": 235,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    517.5,
+    239
+   ]
+  },
+  {
+   "id": "acc-104",
+   "floor": "N1",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso 104",
+   "desc": "Acceso de 104 · Enfermería al pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 675.5,
+    "y": 235,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    709.5,
+    239
+   ]
+  },
+  {
+   "id": "acc-105",
+   "floor": "N1",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso 105",
+   "desc": "Acceso de 105 · Cuarentena al pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 856.5,
+    "y": 235,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    890.5,
+    239
+   ]
+  },
+  {
+   "id": "acc-106",
+   "floor": "N1",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso 106",
+   "desc": "Acceso de 106 · Vestuario al pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 111.5,
+    "y": 350,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    145.5,
+    356
+   ]
+  },
+  {
+   "id": "acc-107",
+   "floor": "N1",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso 107",
+   "desc": "Acceso de 107 · Descanso al pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 291.5,
+    "y": 350,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    325.5,
+    356
+   ]
+  },
+  {
+   "id": "acc-108",
+   "floor": "N1",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso 108",
+   "desc": "Acceso de 108 · Logística al pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 483.5,
+    "y": 350,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    517.5,
+    356
+   ]
+  },
+  {
+   "id": "acc-109",
+   "floor": "N1",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso 109",
+   "desc": "Acceso de 109 · Descontaminación al pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 675.5,
+    "y": 350,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    709.5,
+    356
+   ]
+  },
+  {
+   "id": "acc-110",
+   "floor": "N1",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso 110",
+   "desc": "Acceso de 110 · Servicios al pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 856.5,
+    "y": 350,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    890.5,
+    356
+   ]
+  },
+  {
+   "id": "n1-pasillo-o",
+   "floor": "N1",
+   "kind": "route",
+   "group": "corridor",
+   "name": "Pasillo principal · tramo oeste",
+   "desc": "Tramo del pasillo principal entre los accesos de las salas.",
+   "shape": {
+    "type": "rect",
+    "x": 195,
+    "y": 260,
+    "w": 208.5,
+    "h": 90
+   },
+   "badge": [
+    269.25,
+    266
+   ]
+  },
+  {
+   "id": "n1-pasillo-c",
+   "floor": "N1",
+   "kind": "route",
+   "group": "corridor",
+   "name": "Pasillo principal · tramo central",
+   "desc": "Tramo del pasillo principal entre los accesos de las salas.",
+   "shape": {
+    "type": "rect",
+    "x": 403.5,
+    "y": 260,
+    "w": 192.0,
+    "h": 90
+   },
+   "badge": [
+    469.5,
+    266
+   ]
+  },
+  {
+   "id": "n1-pasillo-e",
+   "floor": "N1",
+   "kind": "route",
+   "group": "corridor",
+   "name": "Pasillo principal · tramo este",
+   "desc": "Tramo del pasillo principal entre los accesos de las salas.",
+   "shape": {
+    "type": "rect",
+    "x": 595.5,
+    "y": 260,
+    "w": 209.5,
+    "h": 90
+   },
+   "badge": [
+    670.25,
+    266
+   ]
+  },
+  {
+   "id": "n1-A",
+   "floor": "N1",
+   "kind": "core",
+   "core": "A",
+   "name": "A · núcleo vertical",
+   "desc": "A: escalera y ascensor de personal.",
+   "shape": {
+    "type": "rect",
+    "x": 60,
+    "y": 260,
+    "w": 135,
+    "h": 90
+   },
+   "parts": [
+    "n1-A-esc",
+    "n1-A-asc"
+   ]
+  },
+  {
+   "id": "n1-B",
+   "floor": "N1",
+   "kind": "core",
+   "core": "B",
+   "name": "B · núcleo vertical",
+   "desc": "B: escalera protegida y montacargas separados.",
+   "shape": {
+    "type": "rect",
+    "x": 805,
+    "y": 260,
+    "w": 135,
+    "h": 90
+   },
+   "parts": [
+    "n1-B-esc",
+    "n1-B-carga"
+   ]
+  },
+  {
+   "id": "n1-A-esc",
+   "floor": "N1",
+   "kind": "transport",
+   "core": "A",
+   "chip": "ESC.",
+   "name": "A · escalera",
+   "desc": "Escalera del núcleo A.",
+   "shape": {
+    "type": "rect",
+    "x": 70,
+    "y": 326,
+    "w": 54,
+    "h": 19
+   }
+  },
+  {
+   "id": "n1-A-asc",
+   "floor": "N1",
+   "kind": "transport",
+   "core": "A",
+   "chip": "ASC.",
+   "name": "A · ascensor de personal",
+   "desc": "Ascensor de personal del núcleo A.",
+   "shape": {
+    "type": "rect",
+    "x": 131,
+    "y": 326,
+    "w": 54,
+    "h": 19
+   }
+  },
+  {
+   "id": "n1-B-esc",
+   "floor": "N1",
+   "kind": "transport",
+   "core": "B",
+   "chip": "ESC.",
+   "name": "B · escalera protegida",
+   "desc": "Escalera protegida del núcleo B, en recinto separado del montacargas.",
+   "shape": {
+    "type": "rect",
+    "x": 815,
+    "y": 326,
+    "w": 54,
+    "h": 19
+   }
+  },
+  {
+   "id": "n1-B-carga",
+   "floor": "N1",
+   "kind": "transport",
+   "core": "B",
+   "chip": "CARGA",
+   "name": "B · montacargas",
+   "desc": "Montacargas del núcleo B, en recinto separado de la escalera.",
+   "shape": {
+    "type": "rect",
+    "x": 876,
+    "y": 326,
+    "w": 54,
+    "h": 19
+   }
+  },
+  {
+   "id": "n1-A-ent-pasillo",
+   "floor": "N1",
+   "kind": "route",
+   "group": "entry",
+   "name": "Entrada a A desde el pasillo principal",
+   "desc": "Puerta entre A y el pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 188,
+    "y": 289,
+    "w": 14,
+    "h": 32
+   },
+   "badge": [
+    173,
+    273
+   ]
+  },
+  {
+   "id": "n1-A-ent-pm",
+   "floor": "N1",
+   "kind": "route",
+   "group": "entry",
+   "name": "Entrada a A desde el pasillo de mantenimiento",
+   "desc": "Puerta entre A y el pasillo de mantenimiento.",
+   "shape": {
+    "type": "rect",
+    "x": 53,
+    "y": 289,
+    "w": 14,
+    "h": 32
+   },
+   "badge": [
+    38,
+    273
+   ]
+  },
+  {
+   "id": "n1-B-ent-pasillo",
+   "floor": "N1",
+   "kind": "route",
+   "group": "entry",
+   "name": "Entrada a B desde el pasillo principal",
+   "desc": "Puerta entre B y el pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 798,
+    "y": 289,
+    "w": 14,
+    "h": 32
+   },
+   "badge": [
+    783,
+    273
+   ]
+  },
+  {
+   "id": "n1-B-ent-pm",
+   "floor": "N1",
+   "kind": "route",
+   "group": "entry",
+   "name": "Entrada a B desde el pasillo de mantenimiento",
+   "desc": "Puerta entre B y el pasillo de mantenimiento.",
+   "shape": {
+    "type": "rect",
+    "x": 933,
+    "y": 289,
+    "w": 14,
+    "h": 32
+   },
+   "badge": [
+    918,
+    273
+   ]
+  },
+  {
+   "id": "n1-pm-o",
+   "floor": "N1",
+   "kind": "route",
+   "group": "pm",
+   "name": "PM · tramo oeste (lado A)",
+   "desc": "Tramo del pasillo de mantenimiento: pasillo de mantenimiento entre A y B.",
+   "shape": {
+    "type": "line",
+    "points": [
+     [
+      60,
+      305
+     ],
+     [
+      42,
+      305
+     ],
+     [
+      42,
+      575
+     ]
+    ],
+    "width": 22
+   },
+   "badge": [
+    48,
+    430
+   ]
+  },
+  {
+   "id": "n1-pm-so",
+   "floor": "N1",
+   "kind": "route",
+   "group": "pm",
+   "name": "PM · tramo sur-oeste",
+   "desc": "Tramo del pasillo de mantenimiento: pasillo de mantenimiento entre A y B.",
+   "shape": {
+    "type": "line",
+    "points": [
+     [
+      42,
+      575
+     ],
+     [
+      330,
+      575
+     ]
+    ],
+    "width": 22
+   },
+   "badge": [
+    160,
+    568
+   ]
+  },
+  {
+   "id": "n1-pm-sc",
+   "floor": "N1",
+   "kind": "route",
+   "group": "pm",
+   "name": "PM · tramo sur-central",
+   "desc": "Tramo del pasillo de mantenimiento: pasillo de mantenimiento entre A y B.",
+   "shape": {
+    "type": "line",
+    "points": [
+     [
+      330,
+      575
+     ],
+     [
+      670,
+      575
+     ]
+    ],
+    "width": 22
+   },
+   "badge": [
+    470,
+    568
+   ]
+  },
+  {
+   "id": "n1-pm-se",
+   "floor": "N1",
+   "kind": "route",
+   "group": "pm",
+   "name": "PM · tramo sur-este",
+   "desc": "Tramo del pasillo de mantenimiento: pasillo de mantenimiento entre A y B.",
+   "shape": {
+    "type": "line",
+    "points": [
+     [
+      670,
+      575
+     ],
+     [
+      958,
+      575
+     ]
+    ],
+    "width": 22
+   },
+   "badge": [
+    780,
+    568
+   ]
+  },
+  {
+   "id": "n1-pm-e",
+   "floor": "N1",
+   "kind": "route",
+   "group": "pm",
+   "name": "PM · tramo este (lado B)",
+   "desc": "Tramo del pasillo de mantenimiento: pasillo de mantenimiento entre A y B.",
+   "shape": {
+    "type": "line",
+    "points": [
+     [
+      958,
+      575
+     ],
+     [
+      958,
+      305
+     ],
+     [
+      940,
+      305
+     ]
+    ],
+    "width": 22
+   },
+   "badge": [
+    890,
+    430
+   ]
+  },
+  {
+   "id": "acc-201",
+   "floor": "N2",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso 201",
+   "desc": "Acceso de 201 · Soporte al pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 111.5,
+    "y": 235,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    145.5,
+    239
+   ]
+  },
+  {
+   "id": "acc-202",
+   "floor": "N2",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso 202",
+   "desc": "Acceso de 202 · Archivo al pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 291.5,
+    "y": 235,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    325.5,
+    239
+   ]
+  },
+  {
+   "id": "acc-203",
+   "floor": "N2",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso 203",
+   "desc": "Acceso de 203 · Análisis al pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 483.5,
+    "y": 235,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    517.5,
+    239
+   ]
+  },
+  {
+   "id": "acc-204",
+   "floor": "N2",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso 204",
+   "desc": "Acceso de 204 · Cultivos al pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 675.5,
+    "y": 235,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    709.5,
+    239
+   ]
+  },
+  {
+   "id": "acc-205",
+   "floor": "N2",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso 205",
+   "desc": "Acceso de 205 · Transferencia al pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 856.5,
+    "y": 235,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    890.5,
+    239
+   ]
+  },
+  {
+   "id": "acc-206",
+   "floor": "N2",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso 206",
+   "desc": "Acceso de 206 · Reserva técnica al pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 111.5,
+    "y": 350,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    145.5,
+    356
+   ]
+  },
+  {
+   "id": "acc-207",
+   "floor": "N2",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso 207",
+   "desc": "Acceso de 207 · Armería al pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 291.5,
+    "y": 350,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    325.5,
+    356
+   ]
+  },
+  {
+   "id": "acc-208",
+   "floor": "N2",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso 208",
+   "desc": "Acceso de 208 · Preparación al pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 483.5,
+    "y": 350,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    517.5,
+    356
+   ]
+  },
+  {
+   "id": "acc-209",
+   "floor": "N2",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso 209",
+   "desc": "Acceso de 209 · Observación al pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 675.5,
+    "y": 350,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    709.5,
+    356
+   ]
+  },
+  {
+   "id": "acc-210",
+   "floor": "N2",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso 210",
+   "desc": "Acceso de 210 · Residuos al pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 856.5,
+    "y": 350,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    890.5,
+    356
+   ]
+  },
+  {
+   "id": "n2-pasillo-o",
+   "floor": "N2",
+   "kind": "route",
+   "group": "corridor",
+   "name": "Pasillo principal · tramo oeste",
+   "desc": "Tramo del pasillo principal entre los accesos de las salas.",
+   "shape": {
+    "type": "rect",
+    "x": 195,
+    "y": 260,
+    "w": 208.5,
+    "h": 90
+   },
+   "badge": [
+    269.25,
+    266
+   ]
+  },
+  {
+   "id": "n2-pasillo-c",
+   "floor": "N2",
+   "kind": "route",
+   "group": "corridor",
+   "name": "Pasillo principal · tramo central",
+   "desc": "Tramo del pasillo principal entre los accesos de las salas.",
+   "shape": {
+    "type": "rect",
+    "x": 403.5,
+    "y": 260,
+    "w": 192.0,
+    "h": 90
+   },
+   "badge": [
+    469.5,
+    266
+   ]
+  },
+  {
+   "id": "n2-pasillo-e",
+   "floor": "N2",
+   "kind": "route",
+   "group": "corridor",
+   "name": "Pasillo principal · tramo este",
+   "desc": "Tramo del pasillo principal entre los accesos de las salas.",
+   "shape": {
+    "type": "rect",
+    "x": 595.5,
+    "y": 260,
+    "w": 209.5,
+    "h": 90
+   },
+   "badge": [
+    670.25,
+    266
+   ]
+  },
+  {
+   "id": "n2-A",
+   "floor": "N2",
+   "kind": "core",
+   "core": "A",
+   "name": "A · núcleo vertical",
+   "desc": "A: escalera y ascensor de personal.",
+   "shape": {
+    "type": "rect",
+    "x": 60,
+    "y": 260,
+    "w": 135,
+    "h": 90
+   },
+   "parts": [
+    "n2-A-esc",
+    "n2-A-asc"
+   ]
+  },
+  {
+   "id": "n2-B",
+   "floor": "N2",
+   "kind": "core",
+   "core": "B",
+   "name": "B · núcleo vertical",
+   "desc": "B: escalera protegida y montacargas separados.",
+   "shape": {
+    "type": "rect",
+    "x": 805,
+    "y": 260,
+    "w": 135,
+    "h": 90
+   },
+   "parts": [
+    "n2-B-esc",
+    "n2-B-carga"
+   ]
+  },
+  {
+   "id": "n2-A-esc",
+   "floor": "N2",
+   "kind": "transport",
+   "core": "A",
+   "chip": "ESC.",
+   "name": "A · escalera",
+   "desc": "Escalera del núcleo A.",
+   "shape": {
+    "type": "rect",
+    "x": 70,
+    "y": 326,
+    "w": 54,
+    "h": 19
+   }
+  },
+  {
+   "id": "n2-A-asc",
+   "floor": "N2",
+   "kind": "transport",
+   "core": "A",
+   "chip": "ASC.",
+   "name": "A · ascensor de personal",
+   "desc": "Ascensor de personal del núcleo A.",
+   "shape": {
+    "type": "rect",
+    "x": 131,
+    "y": 326,
+    "w": 54,
+    "h": 19
+   }
+  },
+  {
+   "id": "n2-B-esc",
+   "floor": "N2",
+   "kind": "transport",
+   "core": "B",
+   "chip": "ESC.",
+   "name": "B · escalera protegida",
+   "desc": "Escalera protegida del núcleo B, en recinto separado del montacargas.",
+   "shape": {
+    "type": "rect",
+    "x": 815,
+    "y": 326,
+    "w": 54,
+    "h": 19
+   }
+  },
+  {
+   "id": "n2-B-carga",
+   "floor": "N2",
+   "kind": "transport",
+   "core": "B",
+   "chip": "CARGA",
+   "name": "B · montacargas",
+   "desc": "Montacargas del núcleo B, en recinto separado de la escalera.",
+   "shape": {
+    "type": "rect",
+    "x": 876,
+    "y": 326,
+    "w": 54,
+    "h": 19
+   }
+  },
+  {
+   "id": "n2-A-ent-pasillo",
+   "floor": "N2",
+   "kind": "route",
+   "group": "entry",
+   "name": "Entrada a A desde el pasillo principal",
+   "desc": "Puerta entre A y el pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 188,
+    "y": 289,
+    "w": 14,
+    "h": 32
+   },
+   "badge": [
+    173,
+    273
+   ]
+  },
+  {
+   "id": "n2-A-ent-pm",
+   "floor": "N2",
+   "kind": "route",
+   "group": "entry",
+   "name": "Entrada a A desde el pasillo de mantenimiento",
+   "desc": "Puerta entre A y el pasillo de mantenimiento.",
+   "shape": {
+    "type": "rect",
+    "x": 53,
+    "y": 289,
+    "w": 14,
+    "h": 32
+   },
+   "badge": [
+    38,
+    273
+   ]
+  },
+  {
+   "id": "n2-B-ent-pasillo",
+   "floor": "N2",
+   "kind": "route",
+   "group": "entry",
+   "name": "Entrada a B desde el pasillo principal",
+   "desc": "Puerta entre B y el pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 798,
+    "y": 289,
+    "w": 14,
+    "h": 32
+   },
+   "badge": [
+    783,
+    273
+   ]
+  },
+  {
+   "id": "n2-B-ent-pm",
+   "floor": "N2",
+   "kind": "route",
+   "group": "entry",
+   "name": "Entrada a B desde el pasillo de mantenimiento",
+   "desc": "Puerta entre B y el pasillo de mantenimiento.",
+   "shape": {
+    "type": "rect",
+    "x": 933,
+    "y": 289,
+    "w": 14,
+    "h": 32
+   },
+   "badge": [
+    918,
+    273
+   ]
+  },
+  {
+   "id": "n2-pm-o",
+   "floor": "N2",
+   "kind": "route",
+   "group": "pm",
+   "name": "PM · tramo oeste (lado A)",
+   "desc": "Tramo del pasillo de mantenimiento: pasillo de mantenimiento entre A y B.",
+   "shape": {
+    "type": "line",
+    "points": [
+     [
+      60,
+      305
+     ],
+     [
+      42,
+      305
+     ],
+     [
+      42,
+      575
+     ]
+    ],
+    "width": 22
+   },
+   "badge": [
+    48,
+    430
+   ]
+  },
+  {
+   "id": "n2-pm-so",
+   "floor": "N2",
+   "kind": "route",
+   "group": "pm",
+   "name": "PM · tramo sur-oeste",
+   "desc": "Tramo del pasillo de mantenimiento: pasillo de mantenimiento entre A y B.",
+   "shape": {
+    "type": "line",
+    "points": [
+     [
+      42,
+      575
+     ],
+     [
+      330,
+      575
+     ]
+    ],
+    "width": 22
+   },
+   "badge": [
+    160,
+    568
+   ]
+  },
+  {
+   "id": "n2-pm-sc",
+   "floor": "N2",
+   "kind": "route",
+   "group": "pm",
+   "name": "PM · tramo sur-central",
+   "desc": "Tramo del pasillo de mantenimiento: pasillo de mantenimiento entre A y B.",
+   "shape": {
+    "type": "line",
+    "points": [
+     [
+      330,
+      575
+     ],
+     [
+      670,
+      575
+     ]
+    ],
+    "width": 22
+   },
+   "badge": [
+    470,
+    568
+   ]
+  },
+  {
+   "id": "n2-pm-se",
+   "floor": "N2",
+   "kind": "route",
+   "group": "pm",
+   "name": "PM · tramo sur-este",
+   "desc": "Tramo del pasillo de mantenimiento: pasillo de mantenimiento entre A y B.",
+   "shape": {
+    "type": "line",
+    "points": [
+     [
+      670,
+      575
+     ],
+     [
+      958,
+      575
+     ]
+    ],
+    "width": 22
+   },
+   "badge": [
+    780,
+    568
+   ]
+  },
+  {
+   "id": "n2-pm-e",
+   "floor": "N2",
+   "kind": "route",
+   "group": "pm",
+   "name": "PM · tramo este (lado B)",
+   "desc": "Tramo del pasillo de mantenimiento: pasillo de mantenimiento entre A y B.",
+   "shape": {
+    "type": "line",
+    "points": [
+     [
+      958,
+      575
+     ],
+     [
+      958,
+      305
+     ],
+     [
+      940,
+      305
+     ]
+    ],
+    "width": 22
+   },
+   "badge": [
+    890,
+    430
+   ]
+  },
+  {
+   "id": "acc-301",
+   "floor": "N3",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso 301",
+   "desc": "Acceso de 301 · Energía al pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 111.5,
+    "y": 235,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    145.5,
+    239
+   ]
+  },
+  {
+   "id": "acc-302",
+   "floor": "N3",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso 302",
+   "desc": "Acceso de 302 · Bombas al pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 291.5,
+    "y": 235,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    325.5,
+    239
+   ]
+  },
+  {
+   "id": "acc-303",
+   "floor": "N3",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso 303",
+   "desc": "Acceso de 303 · Control de emergencia al pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 483.5,
+    "y": 235,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    517.5,
+    239
+   ]
+  },
+  {
+   "id": "acc-304",
+   "floor": "N3",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso 304",
+   "desc": "Acceso de 304 · Tratamiento al pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 675.5,
+    "y": 235,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    709.5,
+    239
+   ]
+  },
+  {
+   "id": "acc-305",
+   "floor": "N3",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso 305",
+   "desc": "Acceso de 305 · Ventilación al pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 856.5,
+    "y": 235,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    890.5,
+    239
+   ]
+  },
+  {
+   "id": "acc-306",
+   "floor": "N3",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso 306",
+   "desc": "Acceso de 306 · Refugio de servicio al pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 111.5,
+    "y": 350,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    145.5,
+    356
+   ]
+  },
+  {
+   "id": "acc-307",
+   "floor": "N3",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso 307",
+   "desc": "Acceso de 307 · Cámara de contención al pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 483.5,
+    "y": 350,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    517.5,
+    356
+   ]
+  },
+  {
+   "id": "acc-310",
+   "floor": "N3",
+   "kind": "route",
+   "group": "access",
+   "name": "Acceso 310",
+   "desc": "Acceso de 310 · Servicio B al pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 856.5,
+    "y": 350,
+    "w": 32,
+    "h": 25
+   },
+   "badge": [
+    890.5,
+    356
+   ]
+  },
+  {
+   "id": "n3-pasillo-o",
+   "floor": "N3",
+   "kind": "route",
+   "group": "corridor",
+   "name": "Pasillo principal · tramo oeste",
+   "desc": "Tramo del pasillo principal entre los accesos de las salas.",
+   "shape": {
+    "type": "rect",
+    "x": 195,
+    "y": 260,
+    "w": 208.5,
+    "h": 90
+   },
+   "badge": [
+    269.25,
+    266
+   ]
+  },
+  {
+   "id": "n3-pasillo-c",
+   "floor": "N3",
+   "kind": "route",
+   "group": "corridor",
+   "name": "Pasillo principal · tramo central",
+   "desc": "Tramo del pasillo principal entre los accesos de las salas.",
+   "shape": {
+    "type": "rect",
+    "x": 403.5,
+    "y": 260,
+    "w": 192.0,
+    "h": 90
+   },
+   "badge": [
+    469.5,
+    266
+   ]
+  },
+  {
+   "id": "n3-pasillo-e",
+   "floor": "N3",
+   "kind": "route",
+   "group": "corridor",
+   "name": "Pasillo principal · tramo este",
+   "desc": "Tramo del pasillo principal entre los accesos de las salas.",
+   "shape": {
+    "type": "rect",
+    "x": 595.5,
+    "y": 260,
+    "w": 209.5,
+    "h": 90
+   },
+   "badge": [
+    670.25,
+    266
+   ]
+  },
+  {
+   "id": "n3-A",
+   "floor": "N3",
+   "kind": "core",
+   "core": "A",
+   "name": "A · núcleo vertical",
+   "desc": "A: escalera y ascensor de personal.",
+   "shape": {
+    "type": "rect",
+    "x": 60,
+    "y": 260,
+    "w": 135,
+    "h": 90
+   },
+   "parts": [
+    "n3-A-esc",
+    "n3-A-asc"
+   ]
+  },
+  {
+   "id": "n3-B",
+   "floor": "N3",
+   "kind": "core",
+   "core": "B",
+   "name": "B · núcleo vertical",
+   "desc": "B: escalera protegida y montacargas separados.",
+   "shape": {
+    "type": "rect",
+    "x": 805,
+    "y": 260,
+    "w": 135,
+    "h": 90
+   },
+   "parts": [
+    "n3-B-esc",
+    "n3-B-carga"
+   ]
+  },
+  {
+   "id": "n3-A-esc",
+   "floor": "N3",
+   "kind": "transport",
+   "core": "A",
+   "chip": "ESC.",
+   "name": "A · escalera",
+   "desc": "Escalera del núcleo A.",
+   "shape": {
+    "type": "rect",
+    "x": 70,
+    "y": 326,
+    "w": 54,
+    "h": 19
+   }
+  },
+  {
+   "id": "n3-A-asc",
+   "floor": "N3",
+   "kind": "transport",
+   "core": "A",
+   "chip": "ASC.",
+   "name": "A · ascensor de personal",
+   "desc": "Ascensor de personal del núcleo A.",
+   "shape": {
+    "type": "rect",
+    "x": 131,
+    "y": 326,
+    "w": 54,
+    "h": 19
+   }
+  },
+  {
+   "id": "n3-B-esc",
+   "floor": "N3",
+   "kind": "transport",
+   "core": "B",
+   "chip": "ESC.",
+   "name": "B · escalera protegida",
+   "desc": "Escalera protegida del núcleo B, en recinto separado del montacargas.",
+   "shape": {
+    "type": "rect",
+    "x": 815,
+    "y": 326,
+    "w": 54,
+    "h": 19
+   }
+  },
+  {
+   "id": "n3-B-carga",
+   "floor": "N3",
+   "kind": "transport",
+   "core": "B",
+   "chip": "CARGA",
+   "name": "B · montacargas",
+   "desc": "Montacargas del núcleo B, en recinto separado de la escalera.",
+   "shape": {
+    "type": "rect",
+    "x": 876,
+    "y": 326,
+    "w": 54,
+    "h": 19
+   }
+  },
+  {
+   "id": "n3-A-ent-pasillo",
+   "floor": "N3",
+   "kind": "route",
+   "group": "entry",
+   "name": "Entrada a A desde el pasillo principal",
+   "desc": "Puerta entre A y el pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 188,
+    "y": 289,
+    "w": 14,
+    "h": 32
+   },
+   "badge": [
+    173,
+    273
+   ]
+  },
+  {
+   "id": "n3-A-ent-pm",
+   "floor": "N3",
+   "kind": "route",
+   "group": "entry",
+   "name": "Entrada a A desde el pasillo de mantenimiento",
+   "desc": "Puerta entre A y el pasillo de mantenimiento.",
+   "shape": {
+    "type": "rect",
+    "x": 53,
+    "y": 289,
+    "w": 14,
+    "h": 32
+   },
+   "badge": [
+    38,
+    273
+   ]
+  },
+  {
+   "id": "n3-B-ent-pasillo",
+   "floor": "N3",
+   "kind": "route",
+   "group": "entry",
+   "name": "Entrada a B desde el pasillo principal",
+   "desc": "Puerta entre B y el pasillo principal.",
+   "shape": {
+    "type": "rect",
+    "x": 798,
+    "y": 289,
+    "w": 14,
+    "h": 32
+   },
+   "badge": [
+    783,
+    273
+   ]
+  },
+  {
+   "id": "n3-B-ent-pm",
+   "floor": "N3",
+   "kind": "route",
+   "group": "entry",
+   "name": "Entrada a B desde el pasillo de mantenimiento",
+   "desc": "Puerta entre B y el pasillo de mantenimiento.",
+   "shape": {
+    "type": "rect",
+    "x": 933,
+    "y": 289,
+    "w": 14,
+    "h": 32
+   },
+   "badge": [
+    918,
+    273
+   ]
+  },
+  {
+   "id": "n3-pm-o",
+   "floor": "N3",
+   "kind": "route",
+   "group": "pm",
+   "name": "PM · tramo oeste (lado A)",
+   "desc": "Tramo del pasillo de mantenimiento: pasillo de mantenimiento entre A y B.",
+   "shape": {
+    "type": "line",
+    "points": [
+     [
+      60,
+      305
+     ],
+     [
+      42,
+      305
+     ],
+     [
+      42,
+      575
+     ]
+    ],
+    "width": 22
+   },
+   "badge": [
+    48,
+    430
+   ]
+  },
+  {
+   "id": "n3-pm-so",
+   "floor": "N3",
+   "kind": "route",
+   "group": "pm",
+   "name": "PM · tramo sur-oeste",
+   "desc": "Tramo del pasillo de mantenimiento: pasillo de mantenimiento entre A y B.",
+   "shape": {
+    "type": "line",
+    "points": [
+     [
+      42,
+      575
+     ],
+     [
+      330,
+      575
+     ]
+    ],
+    "width": 22
+   },
+   "badge": [
+    160,
+    568
+   ]
+  },
+  {
+   "id": "n3-pm-sc",
+   "floor": "N3",
+   "kind": "route",
+   "group": "pm",
+   "name": "PM · tramo sur-central",
+   "desc": "Tramo del pasillo de mantenimiento: pasillo de mantenimiento entre A y B.",
+   "shape": {
+    "type": "line",
+    "points": [
+     [
+      330,
+      575
+     ],
+     [
+      670,
+      575
+     ]
+    ],
+    "width": 22
+   },
+   "badge": [
+    470,
+    568
+   ]
+  },
+  {
+   "id": "n3-pm-se",
+   "floor": "N3",
+   "kind": "route",
+   "group": "pm",
+   "name": "PM · tramo sur-este",
+   "desc": "Tramo del pasillo de mantenimiento: pasillo de mantenimiento entre A y B.",
+   "shape": {
+    "type": "line",
+    "points": [
+     [
+      670,
+      575
+     ],
+     [
+      958,
+      575
+     ]
+    ],
+    "width": 22
+   },
+   "badge": [
+    780,
+    568
+   ]
+  },
+  {
+   "id": "n3-pm-e",
+   "floor": "N3",
+   "kind": "route",
+   "group": "pm",
+   "name": "PM · tramo este (lado B)",
+   "desc": "Tramo del pasillo de mantenimiento: pasillo de mantenimiento entre A y B.",
+   "shape": {
+    "type": "line",
+    "points": [
+     [
+      958,
+      575
+     ],
+     [
+      958,
+      305
+     ],
+     [
+      940,
+      305
+     ]
+    ],
+    "width": 22
+   },
+   "badge": [
+    890,
+    430
+   ]
+  },
+  {
+   "id": "n3-PT",
+   "floor": "N3",
+   "kind": "route",
+   "group": "pt",
+   "name": "PT · portillo",
+   "desc": "PT: portillo entre la cámara 307 y PM.",
+   "shape": {
+    "type": "rect",
+    "x": 680,
+    "y": 545,
+    "w": 28,
+    "h": 30
+   },
+   "badge": [
+    712,
+    548
+   ]
+  },
+  {
+   "id": "n3-C1",
+   "floor": "N3",
+   "kind": "terminal",
+   "name": "C1 · terminal",
+   "desc": "C1/C2: terminales de intervención de emergencia. Solo referencia en esta versión.",
+   "shape": {
+    "type": "circle",
+    "cx": 270,
+    "cy": 505,
+    "r": 17
+   }
+  },
+  {
+   "id": "n3-C2",
+   "floor": "N3",
+   "kind": "terminal",
+   "name": "C2 · terminal",
+   "desc": "C1/C2: terminales de intervención de emergencia. Solo referencia en esta versión.",
+   "shape": {
+    "type": "circle",
+    "cx": 730,
+    "cy": 505,
+    "r": 17
+   }
+  }
+ ]
+}
