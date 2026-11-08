@@ -23,7 +23,7 @@ export function initialContent() {
 }
 
 export function initialPrefs() {
-  return { floor: 'S', showCard: false, shareFrame: true, showLegend: true };
+  return { floor: 'S', showCard: false, shareFrame: true, showLegend: true, scenario: null };
 }
 
 export function clone(v) { return JSON.parse(JSON.stringify(v)); }
@@ -71,6 +71,7 @@ function inX(n) { return isNum(n) && n >= 0 && n <= MAP_W; }
 function inY(n) { return isNum(n) && n >= 0 && n <= MAP_H; }
 function isPlainObject(o) { return o !== null && typeof o === 'object' && !Array.isArray(o); }
 const ANN_ID = /^[a-z][a-z0-9-]{0,39}$/;
+export const SCENARIO_ID = /^[a-z][a-z0-9-]{0,29}$/;
 
 /**
  * Valida un objeto guardado/exportado y devuelve {ok, errors, data}.
@@ -150,6 +151,7 @@ export function validateSave(raw, { statefulIds, mapVersion }) {
   if (isPlainObject(raw.prefs)) {
     if (FLOOR_IDS.includes(raw.prefs.floor)) prefs.floor = raw.prefs.floor;
     for (const k of ['showCard', 'shareFrame', 'showLegend']) if (typeof raw.prefs[k] === 'boolean') prefs[k] = raw.prefs[k];
+    if (typeof raw.prefs.scenario === 'string' && SCENARIO_ID.test(raw.prefs.scenario)) prefs.scenario = raw.prefs.scenario;
   }
 
   if (errors.length) return { ok: false, errors };

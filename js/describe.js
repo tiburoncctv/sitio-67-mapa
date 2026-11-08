@@ -1,6 +1,7 @@
 // Descripción pública de una selección (compartida entre panel y transmisión).
 import { elementState, PASS_TEXT, FLOOR_IDS, MAP_W, MAP_H } from './state.js';
 import { el } from './ui.js';
+import { SCENARIO_BY_ID } from './tactico/registro.js';
 
 export const KIND_TEXT = {
   room: 'Sala', route: 'Tramo de ruta', transport: 'Medio de paso vertical', core: 'Conexión vertical', terminal: 'Terminal de referencia',
@@ -52,7 +53,7 @@ export function publicCardNodes(data, model) {
 
 /** Valida el bloque «published» recibido por la vista de jugadores. */
 export function cleanPublished(pub, data, content) {
-  const out = { floor: 'S', frame: null, cardId: null, showLegend: true };
+  const out = { floor: 'S', frame: null, cardId: null, showLegend: true, scenario: null, scenarioSel: null };
   if (!pub || typeof pub !== 'object') return out;
   if (FLOOR_IDS.includes(pub.floor)) out.floor = pub.floor;
   const f = pub.frame;
@@ -60,5 +61,7 @@ export function cleanPublished(pub, data, content) {
     && f.w > 1 && f.h > 1 && f.w < MAP_W * 10 && f.h < MAP_H * 10 && Math.abs(f.cx) < MAP_W * 3 && Math.abs(f.cy) < MAP_H * 3) out.frame = { cx: f.cx, cy: f.cy, w: f.w, h: f.h };
   if (typeof pub.cardId === 'string' && describe(data, content, pub.cardId)) out.cardId = pub.cardId;
   if (typeof pub.showLegend === 'boolean') out.showLegend = pub.showLegend;
+  if (typeof pub.scenario === 'string' && SCENARIO_BY_ID.has(pub.scenario)) out.scenario = pub.scenario;
+  if (out.scenario && typeof pub.scenarioSel === 'string' && /^[a-z0-9-]{1,40}$/i.test(pub.scenarioSel)) out.scenarioSel = pub.scenarioSel;
   return out;
 }

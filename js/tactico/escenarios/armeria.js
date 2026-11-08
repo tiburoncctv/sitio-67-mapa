@@ -1,0 +1,96 @@
+// 207 · Armería — sala de preparación. 14 × 10. Sin enfrentamiento previsto.
+export default {
+  id:'armeria', floor:'N2', rooms:['207'], short:'207 · Armería',
+  crumb:'SITIO-67 / BETA-7 / NIVEL −2', title:'207 · ARMERÍA',
+  objective:'Revisar y retirar el equipo disponible',
+  meta:'NIVEL −2 · 207 · ACCESO AUTORIZADO DESDE EL PASILLO PRINCIPAL', cols:14, rows:10, margin:{t:62},
+  legend:['wall','tall','low','door','ag'],
+  states:[],
+  starts:[ {code:'C',c:7,r:2}, {code:'M',c:8,r:2}, {code:'L',c:7,r:3}, {code:'T',c:8,r:3} ],
+  initialSel:'i-ig',
+  notes:[
+    'Sin enemigos ni emboscada prevista.',
+    'Puerta al norte: en el plano general la 207 está en la fila sur del nivel −2 y su conector sale al pasillo principal por el norte.',
+    'Stock compartido y finito. Inspeccionar no retira nada: dirección usa − / + en la ficha de cada grupo y puede corregir.',
+    'Las armas de reserva y el ÍGNEO se suman a los consumibles. SCP-500 sigue en 104, no aquí.',
+    'El registro del armero anticipa la compatibilidad con el transporte aéreo; no anuncia ningún accidente.',
+  ],
+  items:[
+    {t:'floor', c:7, r:0.4, w:2, h:0.6, s:'out'},
+    {t:'label', x:7, y:-1.15, text:'↑ PASILLO PRINCIPAL · NIVEL −2', s:'ext', always:true},
+    {t:'floor', c:1, r:1, w:14, h:10, s:'room'},
+    {t:'walls', segs:[[0,0,14,0],[0,0,0,10],[14,0,14,10],[0,10,14,10]]},
+    {t:'door', x:6, y:0, o:'h', n:2, k:'double', sw:1},
+    {t:'label', x:7, y:9.55, text:'PASILLO LIBRE', s:'small'},
+
+    // ===== 1 · ARMAMENTO =====
+    {t:'obj', k:'weaponRack', c:1, r:2, w:1, h:5, empty:[9,10,11,12]},
+    {t:'obj', k:'table', c:3, r:2, w:3, h:2},
+    {t:'raw', layer:'mobiliario', svg:(H)=>{ let s=H.R(84,166,112,30,'','fill="none" stroke="#8f9897" stroke-dasharray="4 3"')+H.R(4,164,32,72,'','fill="none" stroke="#8f9897" stroke-dasharray="4 3"');
+      s+=`<g class="g-labels">${H.Tx(140,185,'ALOJAMIENTO VACÍO','lb-small')}${H.Tx(20,203,'VACÍO','lb-small')}</g>`; return s; }},
+    {t:'raw', layer:'base', svg:(H)=>`<g class="g-labels">${H.Tx(140,138,'REGISTRO: MÓDULOS DE DISPARO','lb-small','style="fill:#e6dc4f"')}${H.Tx(140,148,'DE CONTINGENCIA → TRANSPORTE AÉREO','lb-small','style="fill:#e6dc4f"')}</g>`},
+    {t:'label', x:4.3, y:5.62, text:'1 · ARMAMENTO', s:'room', always:true},
+
+    // ===== 2 · MÉDICO Y PROTECCIÓN =====
+    {t:'obj', k:'cabinetTall', c:1, r:7, w:1, h:4},
+    {t:'obj', k:'table', c:3, r:8, w:2, h:1},
+    {t:'obj', k:'table', c:3, r:10, w:2, h:1},
+    {t:'raw', layer:'mobiliario', svg:(H)=>H.R(4,364,32,32,'','fill="none" stroke="#8f9897" stroke-dasharray="4 3"')+`<g class="g-labels">${H.Tx(20,383,'VACÍO','lb-small')}</g>`},
+    {t:'label', x:4.3, y:8.62, text:'2 · MÉDICO Y PROTECCIÓN', s:'room', always:true},
+
+    // ===== 3 · CONTENCIÓN Y RECONOCIMIENTO =====
+    {t:'obj', k:'crates', c:10, r:2, w:4, h:1},
+    {t:'obj', k:'shelfTall', c:14, r:3, w:1, h:5},
+    {t:'raw', layer:'mobiliario', svg:(H)=>H.R(524,204,32,72,'','fill="none" stroke="#8f9897" stroke-dasharray="4 3"')+`<g class="g-labels">${H.Tx(540,243,'VACÍO','lb-small')}</g>`},
+    {t:'obj', k:'table', c:10, r:5, w:3, h:2, label:'MESA DE REVISIÓN'},
+    {t:'label', x:11, y:7.5, text:'3 · CONTENCIÓN', s:'room', always:true}, {t:'label', x:11, y:7.9, text:'Y RECONOCIMIENTO', s:'room', always:true},
+
+    // mostrador, registro de retiradas y embalajes
+    {t:'obj', k:'counter', c:3, r:1, w:3, h:1, label:'MOSTRADOR', ly:0.62, lx:4.5},
+    {t:'obj', k:'clipboard', c:11, r:1},
+    {t:'raw', layer:'base', svg:(H)=>`<g class="g-labels">${H.Tx(444,24,'REGISTRO DE RETIRADAS','lb-small','style="text-anchor:start"')}</g>`},
+    {t:'obj', k:'crates', c:12, r:9, w:2, h:2},
+    {t:'obj', k:'box', c:11, r:10, layer:'mobiliario'},
+    {t:'label', x:10.9, y:9.3, text:'EMBALAJES', s:'small'},
+  ],
+  contacts:[
+    // 1 · armamento
+    {id:'i-cb', kind:'item', zone:'1 · ARMAMENTO', code:'CB', name:'Carabina compacta de reserva', c:1, r:2, icon:'carabina', rot:90, qty:1,
+      desc:'Unidad física independiente. Cualquier agente puede usarla. Sin bonos permanentes ni modificaciones.',
+      stats:[['Ataque','d20 + 6'],['Daño','2d8 + 3'],['Alcance','8 casillas'],['Munición','Incendiaria normal · no se contabiliza']]},
+    {id:'i-fr', kind:'item', zone:'1 · ARMAMENTO', code:'FR', name:'Fusil de reconocimiento de reserva', c:1, r:3, h:2, icon:'fusil', rot:90, qty:1,
+      desc:'Unidad física independiente. Cualquier agente puede usarlo. Elegirlo no concede las habilidades de la clase tirador: solo sus valores de arma.',
+      stats:[['Ataque','d20 + 6'],['Daño','2d8 + 3'],['Alcance','18 casillas'],['Munición','Incendiaria normal · no se contabiliza']]},
+    {id:'i-ig', kind:'item', zone:'1 · ARMAMENTO', code:'IG', name:'Lanzador de contención ÍGNEO', c:3, r:2, w:3, h:2, icon:'igneo', icon2:'igneoDeploy', icon2Label:'EMPLAZADO · PLACA BASE Y BÍPODE', qty:1,
+      badge:'ÍGNEO / SIN CARGA / COMPATIBLE CON KIT AÉREO DE EMERGENCIA',
+      desc:'Lanzador de respuesta a masas biológicas: tubo portátil de hombro con óptica, y placa base con bípode para fijarlo al suelo como un mortero. Está completo, pero no tiene módulos de disparo. Se puede retirar y llevar sin técnico ni demoliciones, y llevarlo no penaliza el movimiento.',
+      stats:[['Emplazar','1 acción · casilla libre · emplazamiento fijo'],['Estado','Sin carga · indicador sin alimentación'],['Carga','Solo módulos de disparo ÍGNEO']],
+      effect:'Sin módulos no dispara. La munición común, las granadas y las cargas incendiarias potenciadas no lo recargan.',
+      log:'REGISTRO DEL ARMERO · «Módulos de disparo de contingencia: asignados al transporte aéreo».',
+      note:'No es un acertijo: le falta un recurso específico que lleva el transporte. Retirarlo está autorizado.'},
+    // 2 · médico y protección
+    {id:'i-bf', kind:'item', zone:'2 · MÉDICO Y PROTECCIÓN', code:'BC', name:'Botiquín de campo', c:1, r:7, h:2, icon:'botiquin', qty:6, show:2,
+      effect:'Acción: cura 2d8 + 3 a uno mismo o a un adyacente. Puede levantar a un agente a 0 PV.'},
+    {id:'i-bt', kind:'item', zone:'2 · MÉDICO Y PROTECCIÓN', code:'BT', name:'Botiquín de trauma', c:3, r:10, w:2, icon:'trauma', qty:2, show:2,
+      effect:'Mismo uso que el de campo: cura 3d8 + 6.'},
+    {id:'i-pl', kind:'item', zone:'2 · MÉDICO Y PROTECCIÓN', code:'PL', name:'Placa reforzada', c:3, r:8, w:2, icon:'placa', qty:4, show:3,
+      effect:'Reduce 8 de un daño conocido. Se consume sin acción. Una placa equipada por agente.'},
+    // 3 · contención y reconocimiento
+    {id:'i-gi', kind:'item', zone:'3 · CONTENCIÓN Y RECONOCIMIENTO', code:'GI', name:'Granada incendiaria', c:10, r:2, w:2, icon:'incendiaria', qty:3, show:3,
+      effect:'Acción, alcance 6, área 2 × 2, ataque +6 y daño 2d6. Puede afectar a aliados.'},
+    {id:'i-gh', kind:'item', zone:'3 · CONTENCIÓN Y RECONOCIMIENTO', code:'GH', name:'Granada de humo', c:12, r:2, w:2, icon:'humo', qty:3, show:3,
+      effect:'Acción, alcance 6, zona 3 × 3. +2 Defensa ante disparos que la atraviesen, sin acumular con media cobertura, hasta terminar la próxima fase enemiga.'},
+    {id:'i-es', kind:'item', zone:'3 · CONTENCIÓN Y RECONOCIMIENTO', code:'ES', name:'Espuma de sellado', c:14, r:3, icon:'espuma', qty:2, show:2, layout:'h', tag:'w',
+      effect:'Acción adyacente: sella un hueco de hasta dos casillas. Barrera de 15 PV y Defensa 10.'},
+    {id:'i-ct', kind:'item', zone:'3 · CONTENCIÓN Y RECONOCIMIENTO', code:'CT', name:'Carga térmica portátil', c:14, r:4, icon:'termica', qty:2, show:2, layout:'v', tag:'w',
+      effect:'Acción adyacente contra un objeto inmóvil o tejido arraigado: 3d6 + 3 automático. Consumible, distinta de C1/C2.'},
+    {id:'i-cp', kind:'item', zone:'3 · CONTENCIÓN Y RECONOCIMIENTO', code:'CP', name:'Carga incendiaria potenciada', c:14, r:5, icon:'potenciada', qty:4, show:2, layout:'h', tag:'w',
+      effect:'Consumible. Al acertar un ataque básico, +1d6 a una criatura impactada sin otra acción; una por ataque. No sirve para ÍGNEO, granadas ni especiales.'},
+    {id:'i-cr', kind:'item', zone:'3 · CONTENCIÓN Y RECONOCIMIENTO', code:'CR', name:'Cable de rescate', c:12, r:5, icon:'cable', qty:1,
+      effect:'Reutilizable. Acción: acerca hasta tres casillas a un aliado voluntario o incapacitado a alcance 6, por una ruta libre.'},
+    {id:'i-vt', kind:'item', zone:'3 · CONTENCIÓN Y RECONOCIMIENTO', code:'VT', name:'Visor térmico', c:11, r:5, icon:'visor', qty:1,
+      effect:'Ventaja al buscar criaturas entre oscuridad o humo con línea de visión. No mejora ataques ni atraviesa paredes.'},
+    {id:'i-dr', kind:'item', zone:'3 · CONTENCIÓN Y RECONOCIMIENTO', code:'DR', name:'Dron de reconocimiento', c:10, r:5, icon:'dron', qty:1,
+      effect:'Acción para operarlo: se mueve hasta 8 casillas, a 20 como máximo del operador. 1 PV, Defensa 10, sin ataques.'},
+  ],
+};

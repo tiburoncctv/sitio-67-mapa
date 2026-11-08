@@ -61,12 +61,13 @@ export class MapView {
 
   buildDefs() {
     const d = svg('defs', {}, this.root);
-    const hatch = svg('pattern', { id: 'pat-blocked', width: 10, height: 10, patternUnits: 'userSpaceOnUse', patternTransform: 'rotate(45)' }, d);
-    svg('rect', { width: 10, height: 10, fill: 'rgba(255,92,92,0.10)' }, hatch);
-    svg('line', { x1: 0, y1: 0, x2: 0, y2: 10, stroke: '#ff6b6b', 'stroke-width': 3, 'stroke-opacity': 0.55 }, hatch);
-    const dots = svg('pattern', { id: 'pat-cont', width: 12, height: 12, patternUnits: 'userSpaceOnUse' }, d);
-    svg('circle', { cx: 3, cy: 3, r: 2.1, fill: '#ff5fd2', 'fill-opacity': 0.75 }, dots);
-    svg('circle', { cx: 9, cy: 9, r: 2.1, fill: '#ff5fd2', 'fill-opacity': 0.75 }, dots);
+    // Lenguaje de estado táctico: bloqueado = rayado naranja a +45°, contaminado = franjas magenta a −45°.
+    const hatch = svg('pattern', { id: 'pat-blocked', width: 9, height: 9, patternUnits: 'userSpaceOnUse', patternTransform: 'rotate(45)' }, d);
+    svg('rect', { width: 9, height: 9, fill: 'rgba(255,106,42,0.10)' }, hatch);
+    svg('line', { x1: 0, y1: 0, x2: 0, y2: 9, stroke: '#ff6a2a', 'stroke-width': 2.5, 'stroke-opacity': 0.6 }, hatch);
+    const stripes = svg('pattern', { id: 'pat-cont', width: 12, height: 12, patternUnits: 'userSpaceOnUse', patternTransform: 'rotate(-45)' }, d);
+    svg('rect', { width: 12, height: 12, fill: 'rgba(255,63,160,0.06)' }, stripes);
+    svg('line', { x1: 0, y1: 0, x2: 0, y2: 12, stroke: '#ff3fa0', 'stroke-width': 2, 'stroke-opacity': 0.45 }, stripes);
   }
 
   // ------------------------------------------------------------ encuadre
@@ -124,6 +125,8 @@ export class MapView {
     copy.setAttribute('x', 0); copy.setAttribute('y', 0); copy.setAttribute('width', MAP_W); copy.setAttribute('height', MAP_H);
     copy.removeAttribute('role');
     this.baseLayer.appendChild(copy);
+    // marcas de esquina del marco (identidad táctica)
+    svg('path', { d: 'M20 75 h18 M20 75 v18 M980 75 h-18 M980 75 v18 M20 610 h18 M20 610 v-18 M980 610 h-18 M980 610 v-18', class: 'frame-ticks' }, this.baseLayer);
     this.buildHit();
   }
 
@@ -174,13 +177,13 @@ export class MapView {
       if (st.contaminated) shapeNode(el, g, isLine ? { stroke: 'url(#pat-cont)', class: 'fill-cont' } : { fill: 'url(#pat-cont)', class: 'fill-cont' });
       if (st.pass === 'blocked') shapeNode(el, g, isLine ? { stroke: 'url(#pat-blocked)', class: 'fill-blocked' } : { fill: 'url(#pat-blocked)', class: 'fill-blocked' });
       if (isLine) {
-        if (st.pass === 'open') shapeNode(el, g, { stroke: '#7ee2a8', 'stroke-width': 3, 'stroke-dasharray': '1 0', class: 'line-open' });
-        if (st.pass === 'blocked') shapeNode(el, g, { stroke: '#ff6b6b', 'stroke-width': 4, class: 'line-blocked' });
-        if (st.contaminated) shapeNode(el, g, { stroke: '#ff5fd2', 'stroke-width': 2, 'stroke-dasharray': '2 4', transform: 'translate(0 0)', class: 'line-cont' });
+        if (st.pass === 'open') shapeNode(el, g, { stroke: '#48d8d8', 'stroke-width': 3, 'stroke-dasharray': '1 0', class: 'line-open' });
+        if (st.pass === 'blocked') shapeNode(el, g, { stroke: '#ff6a2a', 'stroke-width': 3, class: 'line-blocked' });
+        if (st.contaminated) shapeNode(el, g, { stroke: '#ff3fa0', 'stroke-width': 2, 'stroke-dasharray': '6 4', transform: 'translate(0 0)', class: 'line-cont' });
       } else {
-        if (st.pass === 'open') shapeNode(el, g, { fill: 'none', stroke: '#7ee2a8', 'stroke-width': 2.5, class: 'outline-open' });
-        if (st.pass === 'blocked') shapeNode(el, g, { fill: 'none', stroke: '#ff6b6b', 'stroke-width': 3, class: 'outline-blocked' });
-        if (st.contaminated) shapeNode(el, g, { fill: 'none', stroke: '#ff5fd2', 'stroke-width': 2, 'stroke-dasharray': '6 4', class: 'outline-cont' });
+        if (st.pass === 'open') shapeNode(el, g, { fill: 'none', stroke: '#48d8d8', 'stroke-width': 2.5, class: 'outline-open' });
+        if (st.pass === 'blocked') shapeNode(el, g, { fill: 'none', stroke: '#ff6a2a', 'stroke-width': 2.5, class: 'outline-blocked' });
+        if (st.contaminated) shapeNode(el, g, { fill: 'none', stroke: '#ff3fa0', 'stroke-width': 2, 'stroke-dasharray': '6 4', class: 'outline-cont' });
       }
       this.drawBadges(el, st, badgesLayer);
     }
@@ -191,10 +194,17 @@ export class MapView {
       const el = this.data.byId.get(sel.id);
       if (el.floor === fl) {
         const isLine = el.shape.type === 'line';
-        shapeNode(el, this.selLayer, isLine
-          ? { stroke: '#38e1ff', 'stroke-width': el.shape.width + 6, 'stroke-opacity': 0.35, class: 'sel-glow' }
-          : { fill: 'rgba(56,225,255,0.10)', stroke: '#38e1ff', 'stroke-width': 3.5, class: 'sel-outline' });
-        if (isLine) shapeNode(el, this.selLayer, { stroke: '#38e1ff', 'stroke-width': 2, class: 'sel-outline' });
+        if (isLine) {
+          shapeNode(el, this.selLayer, { stroke: '#e6dc4f', 'stroke-width': el.shape.width + 6, 'stroke-opacity': 0.3, class: 'sel-glow' });
+          shapeNode(el, this.selLayer, { stroke: '#e6dc4f', 'stroke-width': 2, class: 'sel-outline' });
+        } else {
+          // selección: lavado amarillo + escuadras en las esquinas
+          shapeNode(el, this.selLayer, { fill: 'rgba(230,220,79,0.08)', stroke: 'none', class: 'sel-outline' });
+          const s = el.shape;
+          const [x, y, w, h] = s.type === 'rect' ? [s.x, s.y, s.w, s.h] : [s.cx - s.r, s.cy - s.r, s.r * 2, s.r * 2];
+          const L = Math.min(20, w / 3, h / 3);
+          svg('path', { d: `M${x} ${y + L} V${y} H${x + L} M${x + w - L} ${y} H${x + w} V${y + L} M${x + w} ${y + h - L} V${y + h} H${x + w - L} M${x + L} ${y + h} H${x} V${y + h - L}`, class: 'sel-brackets' }, this.selLayer);
+        }
       }
     }
 
@@ -247,11 +257,10 @@ export class MapView {
   drawBlock(b, selected) {
     const g = svg('g', { class: `ann ann-block${selected ? ' is-selected' : ''}`, 'data-ann': 'block', 'data-ann-id': b.id, 'data-handle': 'body' }, this.annLayer);
     if (this.interactive) { g.setAttribute('tabindex', '0'); g.setAttribute('role', 'button'); g.setAttribute('aria-label', `Bloqueo${b.label ? ': ' + b.label : ''}`); }
-    if (selected) svg('circle', { cx: b.x, cy: b.y, r: 17, class: 'ann-sel' }, g);
-    const r = 11; const pts = [];
-    for (let i = 0; i < 8; i++) { const a = Math.PI / 8 + (i * Math.PI) / 4; pts.push(`${(b.x + r * Math.cos(a)).toFixed(2)},${(b.y + r * Math.sin(a)).toFixed(2)}`); }
-    svg('polygon', { points: pts.join(' '), class: 'block-oct' }, g);
-    svg('path', { d: `M${b.x - 4.5} ${b.y - 4.5} L${b.x + 4.5} ${b.y + 4.5} M${b.x + 4.5} ${b.y - 4.5} L${b.x - 4.5} ${b.y + 4.5}`, class: 'block-x' }, g);
+    if (selected) svg('circle', { cx: b.x, cy: b.y, r: 18, class: 'ann-sel' }, g);
+    // triángulo de peligro naranja con «!»
+    svg('polygon', { points: `${b.x},${b.y - 12} ${b.x + 12},${b.y + 9} ${b.x - 12},${b.y + 9}`, class: 'block-oct' }, g);
+    svg('path', { d: `M${b.x} ${b.y - 4} V${b.y + 2} M${b.x} ${b.y + 5} V${b.y + 5.5}`, class: 'block-x' }, g);
     text(g, b.x, b.y + 25, b.label ? `BLOQUEO · ${b.label}` : 'BLOQUEO', { 'text-anchor': 'middle', class: 'map-text ann-label ann-label-block' });
   }
 
@@ -271,12 +280,15 @@ export class MapView {
 
   drawMarker(m) {
     const g = svg('g', { class: 'beta-marker', transform: `translate(${m.x} ${m.y})` }, this.markerLayer);
-    svg('circle', { r: 19, class: 'marker-halo' }, g);
-    svg('path', { d: 'M0 -15 L13 7.5 L-13 7.5 Z', class: 'marker-tri' }, g);
-    svg('circle', { r: 2.6, class: 'marker-dot' }, g);
+    // anillo amarillo con puntero magenta (identidad táctica)
+    svg('circle', { r: 22, class: 'marker-halo' }, g);
+    svg('circle', { r: 12, class: 'marker-ring' }, g);
+    svg('circle', { r: 4, class: 'marker-dot' }, g);
+    svg('path', { d: 'M0 -15 L13 7.5 L-13 7.5 Z', class: 'marker-tri' }, g); // referencia geométrica (invisible)
+    svg('path', { d: 'M-8 -29 h16 l-8 12 z', class: 'marker-pointer' }, g);
     const lbl = svg('g', { class: 'marker-label' }, g);
-    svg('rect', { x: -27, y: -38, width: 54, height: 17, rx: 3 }, lbl);
-    text(lbl, 0, -25.5, 'BETA-7', { 'text-anchor': 'middle', class: 'map-text marker-text' });
+    svg('rect', { x: -36, y: -52, width: 72, height: 20 }, lbl);
+    text(lbl, 0, -37, 'BETA-7', { 'text-anchor': 'middle', class: 'map-text marker-text' });
   }
 
   // ------------------------------------------------------------ temporales (herramientas)
