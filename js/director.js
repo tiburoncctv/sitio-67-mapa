@@ -97,6 +97,7 @@ export function startDirector(data) {
   $('#btn-legend').addEventListener('click', toggleLegend);
   $('#btn-enemies').addEventListener('click', () => toggleEnemies('primary'));
   $('#btn-present').addEventListener('click', () => togglePresent(true));
+  $('#btn-detect').addEventListener('click', () => { const msg = tview.toggleDetected(); publishNow(); if (msg) flash(msg); });
   $('#btn-zoom-in').addEventListener('click', () => map.zoomBy(1.25));
   $('#btn-zoom-out').addEventListener('click', () => map.zoomBy(0.8));
   $('#btn-fit').addEventListener('click', () => map.fit());
@@ -142,6 +143,12 @@ export function startDirector(data) {
       if (k === 'l') { e.preventDefault(); toggleLegend(); return; }
       if (k === 'e') { e.preventDefault(); toggleEnemies('primary'); return; }
       if (k === 'r' && D.prefs.scenario) { e.preventDefault(); toggleEnemies('secondary'); return; }
+      if (k === 't' && D.prefs.scenario) { e.preventDefault(); const msg = tview.toggleDetected(); publishNow(); if (msg) flash(msg); return; }
+      // 1–4 · cambiar de planta (también desde un escenario), útil con la interfaz oculta
+      if (!e.shiftKey && /^Digit[1-9]$/.test(e.code)) {
+        const f = data.floors[+e.code.slice(5) - 1];
+        if (f) { e.preventDefault(); if (D.prefs.scenario) setScenario(null); setFloor(f.id); return; }
+      }
       if (k === 'h') { e.preventDefault(); togglePresent(); return; }
     }
     if (e.key === 'Escape') {
@@ -182,8 +189,7 @@ export function startDirector(data) {
     document.body.classList.toggle('tac-mode', !!next);
     $('#tac-host').hidden = !next; $('#tac-panel').hidden = !next;
     scenSel.value = next || '';
-    if (!next && D.present) togglePresent(false);
-    if (next) { setTool('select'); tview.setScenario(SCENARIO_BY_ID.get(next)); tview.setLegend(D.prefs.showLegend); $('#tooltip').hidden = true; }
+    if (next) { setTool('select'); tview.setScenario(SCENARIO_BY_ID.get(next)); tview.setLegend(D.prefs.showLegend); tview.setPresent(D.present); $('#tooltip').hidden = true; }
     persist(); renderAll(); publishNow();
   }
   function toggleLegend() {
@@ -197,14 +203,14 @@ export function startDirector(data) {
     publishNow(); renderTxStatus();
     if (msg) flash(msg);
   }
-  // H · modo transmisión: oculta toda la interfaz salvo la cabecera del escenario.
-  // En el plano general reutiliza el modo limpio.
+  // H · modo transmisión: oculta la interfaz salvo «Abrir vista para transmitir» y la ficha de selección.
+  // El mapa sigue siendo navegable: seleccionar, abrir escenarios y cambiar de planta (1–4).
   function togglePresent(on = !D.present) {
-    if (!D.prefs.scenario) { if (on) enterClean(); return; }
     D.present = on;
     document.body.classList.toggle('present', on);
     $('#tooltip').hidden = true;
     tview.setPresent(on);
+    if (!D.prefs.scenario) map.apply();
   }
   function renderShortcuts() {
     const bl = $('#btn-legend'); bl.setAttribute('aria-pressed', String(D.prefs.showLegend)); bl.firstChild.textContent = D.prefs.showLegend ? 'Leyenda ' : 'Leyenda oculta ';

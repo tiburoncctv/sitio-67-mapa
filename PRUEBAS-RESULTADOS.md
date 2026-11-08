@@ -1,6 +1,6 @@
 # Resultados de las pruebas de aceptación
 
-Fecha: 5 de noviembre de 2026; repetidas el 7 de noviembre de 2026 tras el rediseño táctico y la integración de escenarios (25/25 de nuevo, más 16/16 de `pruebas/tactico.mjs` y 13/13 pruebas de unidad tras el modo transmisión). Entorno: Google Chrome (headless, Linux) controlado con Playwright 1.63, servido con `python3 -m http.server` bajo las subrutas `/repositorio/mapa/` y `/sitio-67-mapa/` (la de este repositorio) para imitar GitHub Pages; 25/25 comprobaciones en ambas. Pruebas de unidad del modelo con `node --test` (7/7 aprobadas).
+Fecha: 5 de noviembre de 2026; repetidas el 7 de noviembre de 2026 tras el rediseño táctico y la integración de escenarios (25/25 de nuevo, más 18/18 de `pruebas/tactico.mjs` y 13/13 pruebas de unidad tras el modo transmisión). Entorno: Google Chrome (headless, Linux) controlado con Playwright 1.63, servido con `python3 -m http.server` bajo las subrutas `/repositorio/mapa/` y `/sitio-67-mapa/` (la de este repositorio) para imitar GitHub Pages; 25/25 comprobaciones en ambas. Pruebas de unidad del modelo con `node --test` (7/7 aprobadas).
 
 Cada caso se ejecutó en el navegador mediante interacción real (clics, arrastres, rueda, teclado, ventanas, archivos), no por revisión de código. Script: `pruebas/acceptance.mjs`.
 
@@ -46,7 +46,7 @@ Cada caso se ejecutó en el navegador mediante interacción real (clics, arrastr
 
 ## Escenarios tácticos (`pruebas/tactico.mjs`)
 
-7 de noviembre de 2026 · Chrome headless (Playwright) · servido bajo `/sitio-67-mapa/`. 16/16 aprobadas (repetidas tras añadir el modo transmisión H, E/R por lados, Mayús/Alt + número y el arreglo del arrastre).
+7 de noviembre de 2026 · Chrome headless (Playwright) · servido bajo `/sitio-67-mapa/`. 18/18 aprobadas (repetidas tras añadir el modo transmisión H, E/R por lados, Mayús/Alt + número y el arreglo del arrastre).
 
 | # | Comprobación | Resultado |
 |---|---|---|
@@ -63,6 +63,8 @@ Cada caso se ejecutó en el navegador mediante interacción real (clics, arrastr
 | 11 | Pulsar una planta vuelve al plano general en dirección y transmisión | Aprobado |
 | 12 | Un icono seleccionado se arrastra y arrastrar no selecciona | Aprobado |
 | 13 | Alt+1 añade un Errante bajo el cursor (visible en transmisión), Alt+4 un Ariete y Supr lo borra | Aprobado |
-| 14 | H: modo transmisión sin interfaz, sin amenazas ocultas y con arrastre | Aprobado |
-| 15 | 203/204: E muestra los contactos del lado de entrada y R los del otro lado | Aprobado |
+| 14 | H: solo mapa, «Abrir vista» y ficha; arrastre y cambio de planta con números | Aprobado |
+| 15 | 203/204: E muestra los contactos del lado de entrada, R los del otro y T los marca detectados | Aprobado |
 | 16 | Sin errores de consola | Aprobado |
+| 17 | T alterna detectados / no detectados sin ocultarlos a dirección | Aprobado |
+| 18 | ÍGNEO aparece en la escena del helicóptero estrellado y se arrastra | Aprobado |
