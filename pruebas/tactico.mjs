@@ -129,25 +129,45 @@ await page.focus(`#tac-host .tok[data-id="${ex[0].id}"]`); await page.keyboard.p
 t = await T();
 check(13, 'Alt+1 añade un Errante bajo el cursor (visible en transmisión), Alt+4 un Ariete y Supr lo borra', ex.length === 2 && ex[0].type === 'errante' && ex[0].c === 4 && ex[0].r === 4 && ex[1].type === 'ariete' && exPl === 2 && t.scen.camara.extra.length === 1, JSON.stringify(ex));
 
-// 14 · H oculta toda la interfaz salvo la cabecera; se puede seguir arrastrando
+// 14 · H oculta la interfaz salvo «Abrir vista para transmitir» y la ficha; sigue siendo navegable
 await page.click('#tac-host .t-title'); await page.keyboard.press('h'); await page.waitForTimeout(150);
 const vis = (sel) => page.$eval(sel, (n) => !!(n.offsetWidth || n.offsetHeight));
-const uiHidden = !(await vis('.topbar')) && !(await vis('.toolbar')) && !(await vis('#panel')) && await vis('#tac-host .t-head');
+const uiScen = !(await vis('.topbar')) && !(await vis('#btn-legend')) && await vis('#btn-open-player') && await vis('#tac-panel [data-t="sec-detail"]') && !(await vis('#tac-panel [data-t="layers"]')) && await vis('#tac-host .t-head');
 const unrevShown = await page.$$eval('#tac-host .tok.unrev', (n) => n.length);
 t = await T(); const C0 = t.scen.camara.agents.C; p0 = await cellPoint(C0.c, C0.r); p1 = await cellPoint(C0.c + 1, C0.r);
 await page.mouse.move(p0.x, p0.y); await page.mouse.down(); await page.mouse.move(p1.x, p1.y, { steps: 5 }); await page.mouse.up(); await page.waitForTimeout(60);
 t = await T(); const dragged = t.scen.camara.agents.C.c === C0.c + 1;
+await page.keyboard.press('Digit2'); await page.waitForTimeout(150);
+const floorNow = await page.evaluate(() => JSON.parse(localStorage.getItem('sitio67:mapa:v1') || '{}')?.prefs?.floor ?? null);
+const uiFloor = (await page.$eval('#tac-host', (n) => n.hidden)) && await vis('.sel-card') && !(await vis('.topbar')) && !(await vis('#list-title')) && await vis('#map-host');
 await page.keyboard.press('h'); await page.waitForTimeout(100);
-check(14, 'H: modo transmisión sin interfaz, sin amenazas ocultas y con arrastre', uiHidden && unrevShown === 0 && dragged && await vis('.topbar'), `ui=${uiHidden} ocultas=${unrevShown} arrastre=${dragged}`);
+check(14, 'H: solo mapa, «Abrir vista» y ficha; arrastre y cambio de planta con números', uiScen && unrevShown === 0 && dragged && uiFloor && await vis('.topbar'), `escenario=${uiScen} ocultas=${unrevShown} arrastre=${dragged} planta=${uiFloor} (${floorNow})`);
+
+// 17 · T marca los contactos visibles como detectados / no detectados
+await open('camara');
+await page.click('#tac-host .t-title'); await page.keyboard.press('t'); await pl.waitForTimeout(250);
+const tOff = await plTok('.tok[data-id="mc"]'); const tOffD = await page.$$eval('#tac-host .tok.unrev[data-id="mc"]', (n) => n.length);
+await page.keyboard.press('t'); await pl.waitForTimeout(250);
+check(17, 'T alterna detectados / no detectados sin ocultarlos a dirección', tOff === 0 && tOffD === 1 && (await plTok('.tok[data-id="mc"]')) === 1);
 
 // 15 · 203/204: E revela el lado de entrada y R el otro
 await open('laboratorios');
 const labPl = async () => { await pl.waitForTimeout(250); const v = await pl.$$eval('#player-tac .tok', (n) => n.map((x) => x.dataset.id)); return ['e1', 'e2', 'e3'].map((i) => v.includes(i) ? 1 : 0).join(''); };
 const r0 = await labPl(); const dirSees = await page.$$eval('#tac-host .tok.unrev', (n) => n.filter((x) => /^e\d$/.test(x.dataset.id)).length);
-await page.click('#tac-host .t-title'); await page.keyboard.press('e'); const r1 = await labPl();
-await page.keyboard.press('r'); const r2 = await labPl();
+await page.click('#tac-host .t-title'); await page.keyboard.press('e'); await page.keyboard.press('t'); const r1 = await labPl();
+await page.keyboard.press('r'); await page.keyboard.press('t'); const r2 = await labPl();
 await page.keyboard.press('Shift+Digit4'); await page.keyboard.press('e'); const r3 = await labPl();
-check(15, '203/204: E muestra los contactos del lado de entrada y R los del otro lado', r0 === '000' && dirSees === 3 && r1 === '100' && r2 === '111' && r3 === '100', `inicio=${r0} dirección=${dirSees} E=${r1} R=${r2} entrada 204 + E=${r3}`);
+check(15, '203/204: E muestra los contactos del lado de entrada, R los del otro y T los marca detectados', r0 === '000' && dirSees === 3 && r1 === '100' && r2 === '111' && r3 === '100', `inicio=${r0} dirección=${dirSees} E+T=${r1} R+T=${r2} entrada 204 + E=${r3}`);
+
+// 18 · ÍGNEO en el helicóptero estrellado, arrastrable
+await open('superficie');
+await page.click('#tac-host .t-title'); await page.keyboard.press('Shift+Digit3'); await pl.waitForTimeout(200);
+const igPl = await plTok('.tok[data-id="igl"]');
+let g0 = await cellPoint(26, 9), g1 = await cellPoint(22, 12);
+await page.mouse.move(g0.x, g0.y); await page.mouse.down(); await page.mouse.move(g1.x, g1.y, { steps: 6 }); await page.mouse.up(); await page.waitForTimeout(60);
+t = await T(); const igPos = Object.entries(t.scen.superficie.pos).find(([k]) => k.startsWith('igl'))?.[1];
+await page.keyboard.press('Shift+Digit1'); const igLlegada = await page.$$eval('#tac-host .tok[data-id="igl"]', (n) => n.length);
+check(18, 'ÍGNEO aparece en la escena del helicóptero estrellado y se arrastra', igPl === 1 && igPos && igPos.c === 22 && igPos.r === 12 && igLlegada === 0, `transmisión=${igPl} pos=${JSON.stringify(igPos)} en llegada=${igLlegada}`);
 
 check(16, 'Sin errores de consola', !errs.length, errs.slice(0, 3).join(' | '));
 await browser.close();

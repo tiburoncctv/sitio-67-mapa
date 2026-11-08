@@ -283,8 +283,8 @@ kbd { font-family: var(--mono); font-size: 11px; border: 1px solid var(--line2);
 body:not(.tac-mode) .scen-only { display: none !important; }
 .tac-card { border: 0; }
 
-/* H · modo transmisión: solo queda el escenario con su cabecera */
-body.present .topbar, body.present .toolbar, body.present .panel,
-body.present .map-wrap > :not(.tac-host) { display: none !important; }
-body.present .director { grid-template-rows: minmax(0, 1fr); }
-body.present .workspace { grid-template-columns: minmax(0, 1fr); }
+/* H · modo transmisión: solo quedan el mapa, «Abrir vista para transmitir» y la ficha de selección */
+body.present .topbar, body.present .toolbar > .tool-group:not(.right),
+body.present .panel > :not(.sel-card):not(#tac-panel) { display: none !important; }
+body.present .director { grid-template-rows: auto minmax(0, 1fr); }
+body.present #tac-panel > .tac-panel > :not([data-t="sec-detail"]) { display: none !important; }

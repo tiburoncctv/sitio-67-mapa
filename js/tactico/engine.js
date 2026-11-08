@@ -309,11 +309,11 @@ export function createTacticalView(opts) {
           <label class="tg"><input type="checkbox" data-t="t-preview"> PREVISUALIZAR VISTA DE JUGADORES</label>
         </div></section>
       <section class="sec" data-t="sec-states"><h3 class="sl">ESTADO:</h3><div data-t="states"></div></section>
-      <section class="sec"><h3 class="sl">SELECCIÓN:</h3><div class="detail" data-t="detail" aria-live="polite"></div></section>
+      <section class="sec" data-t="sec-detail"><h3 class="sl">SELECCIÓN:</h3><div class="detail" data-t="detail" aria-live="polite"></div></section>
       <section class="sec"><h3 class="sl">CONTACTOS:</h3><div data-t="clists"></div></section>
       <section class="sec"><h3 class="sl">CAPAS:</h3><div class="layers" data-t="layers"></div></section>
       <section class="sec"><h3 class="sl">NOTAS DE DIRECCIÓN:</h3><ul class="notes" data-t="notes"></ul></section>
-      <p class="hint">Dirección coloca los iconos a mano (arrastrar o flechas) y cambia los estados. No hay movimiento, tiradas, daño ni eventos automáticos. Atajos: <kbd>L</kbd> leyenda · <kbd>E</kbd> amenazas.</p>`;
+      <p class="hint">Dirección coloca los iconos a mano (arrastrar o flechas) y cambia los estados. No hay movimiento, tiradas, daño ni eventos automáticos. Atajos: <kbd>L</kbd> leyenda · <kbd>E</kbd> contactos · <kbd>T</kbd> detectados · <kbd>H</kbd> transmitir.</p>`;
     opts.panelHost.appendChild(panel);
   }
   const q = (k) => (panel && panel.querySelector(`[data-t="${k}"]`)) || mapRoot.querySelector(`[data-t="${k}"]`);
@@ -361,7 +361,7 @@ export function createTacticalView(opts) {
     const cs = st.cs[k.id] || {};
     return !players() || (cs.rev && !cs.down);
   }
-  const movable = (k) => director && ['ag', 'npc', 'en', 'obj'].includes(k.kind);
+  const movable = (k) => director && (['ag', 'npc', 'en', 'obj'].includes(k.kind) || !!k.drag);
 
   // ------------------------------------------------------------ render del mapa
   function render() {
@@ -548,9 +548,18 @@ export function createTacticalView(opts) {
     const entry = st.states[sd.key]; const side = which === 'secondary' ? sd.sides.find((x) => x !== entry) : entry;
     const key = 'contactos:' + side, on = st.layers[key] !== true;
     st.layers[key] = on; st.layers.contactos = true;
-    if (on) allContacts().forEach((k) => { if (k.kind === 'en' && !k.extra && sd.sideOf(k) === side) st.cs[k.id] = { ...(st.cs[k.id] || {}), rev: true }; });
     changed(); render(); renderLayers();
     return `Contactos ${on ? 'visibles' : 'ocultos'} · lado ${side}`;
+  }
+  /** T: marca como detectadas (reveladas) o no detectadas las amenazas cuya capa está visible. */
+  function toggleDetected() {
+    if (!S || !layerOn('contactos')) return S ? 'Capa de contactos oculta (E)' : null;
+    const vis = allContacts().filter((k) => k.kind === 'en' && !(st.cs[k.id] || {}).down && !sideHidden(k));
+    if (!vis.length) return 'Sin contactos visibles';
+    const reveal = vis.some((k) => !(st.cs[k.id] || {}).rev);
+    vis.forEach((k) => { st.cs[k.id] = { ...(st.cs[k.id] || {}), rev: reveal }; });
+    changed(); refresh();
+    return reveal ? 'Contactos detectados' : 'Contactos sin detectar';
   }
   /** Mayús + número cambia estados; Alt + número añade amenazas comunes. Devuelve un mensaje o null. */
   function hotkey(e) {
@@ -624,6 +633,7 @@ export function createTacticalView(opts) {
     if (publicOnly) return html;
     if (k.kind === 'item') {
       html += `<div class="acts"><button type="button" class="act" data-act="minus" ${invOf(k) ? '' : 'disabled'}>− RETIRAR UNA</button><button type="button" class="act" data-act="plus" ${invOf(k) < k.qty ? '' : 'disabled'}>+ CORREGIR / DEVOLVER</button></div>`;
+      if (k.drag) html += `<div class="acts"><button type="button" class="act" data-act="rev" aria-pressed="${!!cs.rev}">${cs.rev ? '✓ VISIBLE PARA JUGADORES' : 'MOSTRAR A JUGADORES'}</button>${k.moved ? '<button type="button" class="act" data-act="reset">RESTABLECER POSICIÓN</button>' : ''}</div>`;
       if (k.note) html += `<p class="note"><b>NOTA DE DIRECCIÓN</b>${esc(k.note)}</p>`;
     } else if (k.kind === 'ag') {
       html += '<div class="acts"><button type="button" class="act" data-act="remove">RETIRAR DEL MAPA</button></div>';
@@ -747,7 +757,7 @@ export function createTacticalView(opts) {
     refresh() { if (!S) return; st = store().scen(S.id); hydrate(); refresh(); },
     setLegend(on) { ui.legend = !!on; if (S) render(); },
     setPresent(on) { ui.present = !!on; mapRoot.classList.toggle('present', ui.present); if (S) refresh(); },
-    toggleEnemies, addEnemy, hotkey,
+    toggleEnemies, toggleDetected, addEnemy, hotkey,
     get hasSides() { return !!(S && S.enemySides); },
     /** Ficha pública de un id (para la vista de jugadores); null si no es visible. */
     publicCard(id) { if (!S || !id) return null; const k = allContacts().find((c) => c.id === id); if (!k || !visibleInList(k)) return null; return detailHTML(k, true); },
