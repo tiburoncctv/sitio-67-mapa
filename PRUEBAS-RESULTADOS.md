@@ -56,7 +56,7 @@ Cada caso se ejecutó en el navegador mediante interacción real (clics, arrastr
 | 4 | Las flechas mueven el icono enfocado | Aprobado |
 | 5 | La transmisión muestra el escenario y solo los contactos revelados | Aprobado |
 | 6 | Atajo L oculta y muestra toda la leyenda (dirección y transmisión) | Aprobado |
-| 7 | Atajo E oculta y revela las amenazas (dirección las sigue viendo atenuadas) | Aprobado |
+| 7 | Atajo E oculta y muestra la capa Contactos (dirección y transmisión) | Aprobado |
 | 8 | Armería: 14 grupos, ÍGNEO presente y retirada manual | Aprobado |
 | 9 | Patio: Mayús+3 pasa al jefe final sin que el panel delate las otras escenas | Aprobado |
 | 10 | El escenario activo y su estado sobreviven a la recarga | Aprobado |
@@ -64,5 +64,5 @@ Cada caso se ejecutó en el navegador mediante interacción real (clics, arrastr
 | 12 | Un icono seleccionado se arrastra y arrastrar no selecciona | Aprobado |
 | 13 | Alt+1 añade un Errante bajo el cursor (visible en transmisión), Alt+4 un Ariete y Supr lo borra | Aprobado |
 | 14 | H: modo transmisión sin interfaz, sin amenazas ocultas y con arrastre | Aprobado |
-| 15 | 203/204: E revela solo el lado de entrada y R el del otro lado | Aprobado |
+| 15 | 203/204: E muestra los contactos del lado de entrada y R los del otro lado | Aprobado |
 | 16 | Sin errores de consola | Aprobado |

@@ -70,10 +70,12 @@ await page.keyboard.press('l'); await pl.waitForTimeout(200);
 const legBack = !(await pl.$eval('#player-tac .tac', (n) => n.classList.contains('no-legend')));
 check(6, 'Atajo L oculta y muestra toda la leyenda (dirección y transmisión)', legHidden && legBack);
 await page.keyboard.press('e'); await pl.waitForTimeout(300);
-const enHiddenP = await plTok('.tok[data-id="mc"]'); const enUnrevD = await page.$$eval('#tac-host .tok.unrev[data-id="mc"]', (n) => n.length);
+const enHiddenP = await plTok('.tok[data-id="mc"]'); const enHiddenD = await page.$$eval('#tac-host .tok[data-id="mc"]', (n) => n.length);
+const layerChk = await page.$eval('#tac-panel input[data-layer="contactos"]', (n) => n.checked);
 const chipP = await pl.$$eval('#player-tac .t-chips .chip', (n) => n.length);
 await page.keyboard.press('e'); await pl.waitForTimeout(300);
-check(7, 'Atajo E oculta y revela las amenazas (dirección las sigue viendo atenuadas)', enHiddenP === 0 && enUnrevD === 1 && chipP === 0 && (await plTok('.tok[data-id="mc"]')) === 1);
+const dbg7 = JSON.stringify({ enHiddenP, enHiddenD, layerChk, chipP });
+check(7, 'Atajo E oculta y muestra la capa Contactos (dirección y transmisión)', enHiddenP === 0 && enHiddenD === 0 && !layerChk && chipP === 0 && (await plTok('.tok[data-id="mc"]')) === 1 && await page.$eval('#tac-panel input[data-layer="contactos"]', (n) => n.checked), dbg7);
 
 // 8 · armería
 await open('armeria');
@@ -140,12 +142,12 @@ check(14, 'H: modo transmisión sin interfaz, sin amenazas ocultas y con arrastr
 
 // 15 · 203/204: E revela el lado de entrada y R el otro
 await open('laboratorios');
-const labRev = async () => { const s = (await T()).scen.laboratorios.cs || {}; return ['e1', 'e2', 'e3'].map((i) => (s[i] || {}).rev ? 1 : 0).join(''); };
-const r0 = await labRev();
-await page.click('#tac-host .t-title'); await page.keyboard.press('e'); const r1 = await labRev();
-await page.keyboard.press('r'); const r2 = await labRev();
-await page.keyboard.press('Shift+Digit4'); await page.keyboard.press('e'); const r3 = await labRev();
-check(15, '203/204: E revela solo el lado de entrada y R el del otro lado', r0 === '000' && r1 === '100' && r2 === '111' && r3 === '100', `inicio=${r0} E=${r1} R=${r2} entrada 204 + E=${r3}`);
+const labPl = async () => { await pl.waitForTimeout(250); const v = await pl.$$eval('#player-tac .tok', (n) => n.map((x) => x.dataset.id)); return ['e1', 'e2', 'e3'].map((i) => v.includes(i) ? 1 : 0).join(''); };
+const r0 = await labPl(); const dirSees = await page.$$eval('#tac-host .tok.unrev', (n) => n.filter((x) => /^e\d$/.test(x.dataset.id)).length);
+await page.click('#tac-host .t-title'); await page.keyboard.press('e'); const r1 = await labPl();
+await page.keyboard.press('r'); const r2 = await labPl();
+await page.keyboard.press('Shift+Digit4'); await page.keyboard.press('e'); const r3 = await labPl();
+check(15, '203/204: E muestra los contactos del lado de entrada y R los del otro lado', r0 === '000' && dirSees === 3 && r1 === '100' && r2 === '111' && r3 === '100', `inicio=${r0} dirección=${dirSees} E=${r1} R=${r2} entrada 204 + E=${r3}`);
 
 check(16, 'Sin errores de consola', !errs.length, errs.slice(0, 3).join(' | '));
 await browser.close();

@@ -96,8 +96,8 @@ Selector **Escenario táctico** en la barra superior, o el botón «Abrir escena
 |---|---|
 | **L** | Muestra u oculta toda la leyenda (plano general y escenarios, dirección y transmisión) |
 | **H** | Modo transmisión: oculta toda la interfaz y deja solo el escenario con su cabecera. Se siguen arrastrando iconos y funcionan todos los atajos. H o Esc para salir. En el plano general, H entra al modo limpio |
-| **E** | Revela u oculta las amenazas del escenario. En 203/204 solo las del lado por el que entró el grupo (estado «Marcas de entrada») |
-| **R** | En 203/204, revela u oculta las amenazas del otro lado |
+| **E** | Muestra u oculta la capa **Contactos** (igual que su casilla en «Capas»), en dirección y en transmisión. En 203/204, E muestra u oculta los contactos del lado por el que entró el grupo (estado «Marcas de entrada») y los revela |
+| **R** | En 203/204, lo mismo para los contactos del otro lado |
 | **Mayús + 1…9** | Cambia estados sin tocar el panel. Patio: 1 llegada, 2 salida, 3 jefe final, 4 maletín, 5 módulos, 6–7 conexión de las biomasas B1 y B2. 203/204: 1 pared intacta, 2 aviso, 3 brecha, 4 alterna la entrada. 307: 1 masa, 2 C1, 3 C2, 4 secuencia, 5 descarga. 302/303: 1 válvula, 2 presión. 202: 1 módulo del registro |
 | **Alt + 1…4** | Añade una amenaza común bajo el cursor (1 Errante, 2 Corredor, 3 Escupidor, 4 Ariete), ya revelada |
 | Supr | Borra la amenaza añadida que esté enfocada o seleccionada |

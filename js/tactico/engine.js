@@ -351,10 +351,13 @@ export function createTacticalView(opts) {
     });
     return list;
   }
-  const hiddenEnemies = () => false; // las amenazas se ocultan desrevelándolas (atajo E / R)
+  const hiddenEnemies = () => false;
+  // 203/204: cada lado tiene su propia capa de contactos (atajos E / R). Las amenazas añadidas con Alt no dependen del lado.
+  const sideHidden = (k) => !!(S && S.enemySides && k.kind === 'en' && !k.extra && st.layers['contactos:' + S.enemySides.sideOf(k)] !== true);
   function visibleInList(k) {
     if (k.kind === 'ag') return true;
     if (k.kind === 'en' && hiddenEnemies()) return false;
+    if (players() && sideHidden(k)) return false;
     const cs = st.cs[k.id] || {};
     return !players() || (cs.rev && !cs.down);
   }
@@ -412,7 +415,8 @@ export function createTacticalView(opts) {
       const cs = st.cs[k.id] || {}; const always = k.kind === 'ag';
       const hidden = always ? false : !cs.rev, down = always ? false : !!cs.down;
       if (k.kind === 'en' && hiddenEnemies()) return;
-      if (players() && (hidden || down)) return;
+      const sideOff = sideHidden(k);
+      if (players() && (hidden || down || sideOff)) return;
       const layer = k.kind === 'en' ? 'contactos' : (k.kind === 'obj' || k.kind === 'item') ? 'objetivos' : 'personajes';
       if (!layerOn(layer)) return;
       const x = X(k.c), y = Y(k.r), w = (k.w || 1) * C, h = (k.h || 1) * C;
@@ -440,7 +444,7 @@ export function createTacticalView(opts) {
         mk += R(x - 1, y - 1, w + 2, h + 2, 'focusring') + R(x, y, w, h, '', 'fill="transparent"'); }
       const mv = movable(k);
       if (mv) mk = R(x, y, w, h, '', 'fill="transparent"') + mk;
-      const cls = 'tok' + (hidden && !players() && !always ? ' unrev' : '') + (down ? ' downed' : '') + (mv ? ' movable' : '');
+      const cls = 'tok' + ((hidden || sideOff) && !players() && !always ? ' unrev' : '') + (down ? ' downed' : '') + (mv ? ' movable' : '');
       const al = `${k.code} · ${kindLabel(k)} · ${k.name}${k.kind === 'item' ? ` · disponibles ${invOf(k)} de ${k.qty}` : ''} · columna ${k.c}, fila ${k.r}${mv ? ' · flechas para mover' : ''}`;
       tokens.push({ layer, html: `<g class="${cls}" tabindex="0" role="button" data-id="${esc(k.id)}" ${mv ? 'data-drag="1"' : ''} aria-label="${esc(al)}">${body}${mk}${down ? P(`M${x + 6} ${y + 6} L${x + w - 6} ${y + h - 6} M${x + w - 6} ${y + 6} L${x + 6} ${y + h - 6}`, 'fzd', 'style="stroke:#ff8f8f;stroke-width:2"') : ''}</g>` });
     });
@@ -530,21 +534,23 @@ export function createTacticalView(opts) {
     svg.querySelector(`.tok[data-id="${id}"]`)?.focus({ preventScroll: true });
     return `${t.name} E${n} añadido en ${cell.c} · ${cell.r}`;
   }
-  /** E: amenazas del grupo principal (o del lado de entrada); R: las del otro lado, si el escenario tiene lados. */
+  /** E: muestra u oculta la capa de contactos. En escenarios con lados (203/204), E la del lado de entrada y R la del otro;
+   *  al mostrar un lado se revelan sus amenazas. Devuelve un mensaje o null. */
   function toggleEnemies(which) {
     if (!S) return null;
-    const all = allContacts().filter((k) => k.kind === 'en' && !(st.cs[k.id] || {}).down);
-    let group = all, label = '';
     const sd = S.enemySides;
-    if (sd) {
-      const entry = st.states[sd.key]; const side = which === 'secondary' ? sd.sides.find((x) => x !== entry) : entry;
-      group = all.filter((k) => sd.sideOf(k) === side); label = ` · lado ${side}`;
-    } else if (which === 'secondary') return null;
-    if (!group.length) return `Sin amenazas${label}`;
-    const reveal = group.some((k) => !(st.cs[k.id] || {}).rev);
-    group.forEach((k) => { st.cs[k.id] = { rev: reveal, down: !!(st.cs[k.id] || {}).down }; });
-    changed(); refresh();
-    return `${reveal ? 'Amenazas visibles' : 'Amenazas ocultas'}${label}`;
+    if (!sd) {
+      if (which === 'secondary') return null;
+      st.layers.contactos = !layerOn('contactos');
+      changed(); render(); renderLayers();
+      return st.layers.contactos ? 'Contactos visibles' : 'Contactos ocultos';
+    }
+    const entry = st.states[sd.key]; const side = which === 'secondary' ? sd.sides.find((x) => x !== entry) : entry;
+    const key = 'contactos:' + side, on = st.layers[key] !== true;
+    st.layers[key] = on; st.layers.contactos = true;
+    if (on) allContacts().forEach((k) => { if (k.kind === 'en' && !k.extra && sd.sideOf(k) === side) st.cs[k.id] = { ...(st.cs[k.id] || {}), rev: true }; });
+    changed(); render(); renderLayers();
+    return `Contactos ${on ? 'visibles' : 'ocultos'} · lado ${side}`;
   }
   /** Mayús + número cambia estados; Alt + número añade amenazas comunes. Devuelve un mensaje o null. */
   function hotkey(e) {
