@@ -1,6 +1,6 @@
 # Resultados de las pruebas de aceptación
 
-Fecha: 5 de noviembre de 2026; repetidas el 7 de noviembre de 2026 tras el rediseño táctico y la integración de escenarios (25/25 de nuevo, más 12/12 de `pruebas/tactico.mjs` y 12/12 pruebas de unidad). Entorno: Google Chrome (headless, Linux) controlado con Playwright 1.63, servido con `python3 -m http.server` bajo las subrutas `/repositorio/mapa/` y `/sitio-67-mapa/` (la de este repositorio) para imitar GitHub Pages; 25/25 comprobaciones en ambas. Pruebas de unidad del modelo con `node --test` (7/7 aprobadas).
+Fecha: 5 de noviembre de 2026; repetidas el 7 de noviembre de 2026 tras el rediseño táctico y la integración de escenarios (25/25 de nuevo, más 16/16 de `pruebas/tactico.mjs` y 13/13 pruebas de unidad tras el modo transmisión). Entorno: Google Chrome (headless, Linux) controlado con Playwright 1.63, servido con `python3 -m http.server` bajo las subrutas `/repositorio/mapa/` y `/sitio-67-mapa/` (la de este repositorio) para imitar GitHub Pages; 25/25 comprobaciones en ambas. Pruebas de unidad del modelo con `node --test` (7/7 aprobadas).
 
 Cada caso se ejecutó en el navegador mediante interacción real (clics, arrastres, rueda, teclado, ventanas, archivos), no por revisión de código. Script: `pruebas/acceptance.mjs`.
 
@@ -46,7 +46,7 @@ Cada caso se ejecutó en el navegador mediante interacción real (clics, arrastr
 
 ## Escenarios tácticos (`pruebas/tactico.mjs`)
 
-7 de noviembre de 2026 · Chrome headless (Playwright) · servido bajo `/sitio-67-mapa/`. 12/12 aprobadas.
+7 de noviembre de 2026 · Chrome headless (Playwright) · servido bajo `/sitio-67-mapa/`. 16/16 aprobadas (repetidas tras añadir el modo transmisión H, E/R por lados, Mayús/Alt + número y el arreglo del arrastre).
 
 | # | Comprobación | Resultado |
 |---|---|---|
@@ -56,9 +56,13 @@ Cada caso se ejecutó en el navegador mediante interacción real (clics, arrastr
 | 4 | Las flechas mueven el icono enfocado | Aprobado |
 | 5 | La transmisión muestra el escenario y solo los contactos revelados | Aprobado |
 | 6 | Atajo L oculta y muestra toda la leyenda (dirección y transmisión) | Aprobado |
-| 7 | Atajo E oculta y muestra las amenazas sin delatarlo en transmisión | Aprobado |
+| 7 | Atajo E oculta y revela las amenazas (dirección las sigue viendo atenuadas) | Aprobado |
 | 8 | Armería: 14 grupos, ÍGNEO presente y retirada manual | Aprobado |
-| 9 | Patio: llegada conservada y jefe final con maletín oculto a jugadores | Aprobado |
+| 9 | Patio: Mayús+3 pasa al jefe final sin que el panel delate las otras escenas | Aprobado |
 | 10 | El escenario activo y su estado sobreviven a la recarga | Aprobado |
 | 11 | Pulsar una planta vuelve al plano general en dirección y transmisión | Aprobado |
-| 12 | Sin errores de consola | Aprobado |
+| 12 | Un icono seleccionado se arrastra y arrastrar no selecciona | Aprobado |
+| 13 | Alt+1 añade un Errante bajo el cursor (visible en transmisión), Alt+4 un Ariete y Supr lo borra | Aprobado |
+| 14 | H: modo transmisión sin interfaz, sin amenazas ocultas y con arrastre | Aprobado |
+| 15 | 203/204: E revela solo el lado de entrada y R el del otro lado | Aprobado |
+| 16 | Sin errores de consola | Aprobado |

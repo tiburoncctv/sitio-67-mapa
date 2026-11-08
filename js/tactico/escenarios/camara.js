@@ -12,6 +12,7 @@ export default {
     {key:'seq', label:'SECUENCIA', def:'pend', options:[['pend','PENDIENTE'],['ok','CONFIRMADA']]},
     {key:'desc', label:'DESCARGA LATERAL (DEPENDE DE 302/303)', def:'activa', options:[['activa','ACTIVA'],['aislada','AISLADA']]},
   ],
+  hotkeys:[['masa',null],['c1',null],['c2',null],['seq',null],['desc',null]],
   starts:[ {code:'C',c:14,r:2}, {code:'M',c:15,r:2}, {code:'L',c:13,r:3}, {code:'T',c:16,r:3} ],
   initialSel:'mc',
   notes:[

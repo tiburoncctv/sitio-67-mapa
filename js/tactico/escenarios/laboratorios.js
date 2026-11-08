@@ -6,9 +6,12 @@ export default {
   meta:'NIVEL −2 · 203 / 204 · PASILLO PRINCIPAL AL SUR', cols:28, rows:18,
   legend:['wall','tall','low','diff','tissue','door','ag','en'],
   states:[
-    {key:'pared', label:'PARED 203 / 204 (FILAS 6–9)', def:'intacta', options:[['intacta','INTACTA'],['aviso','GRIETAS'],['brecha','BRECHA ABIERTA']]},
+    {key:'pared', label:'PARED 203 / 204 (FILAS 6–9)', def:'intacta', secret:true, options:[['intacta','INTACTA'],['aviso','GRIETAS'],['brecha','BRECHA ABIERTA']]},
     {key:'entrada', label:'MARCAS DE ENTRADA', def:'203', options:[['203','POR 203'],['204','POR 204']]},
   ],
+  hotkeys:[['pared','intacta'],['pared','aviso'],['pared','brecha'],['entrada',null]],
+  // E revela u oculta las amenazas del lado por el que entró el grupo; R, las del otro lado.
+  enemySides:{ key:'entrada', sides:['203','204'], sideOf:(k)=> (k.c - 1 + (k.w||1)/2) <= 14 ? '203' : '204' },
   starts:[
     {code:'C',c:6,r:17,when:{entrada:'203'}}, {code:'M',c:7,r:17,when:{entrada:'203'}}, {code:'L',c:5,r:17,when:{entrada:'203'}}, {code:'T',c:8,r:17,when:{entrada:'203'}},
     {code:'C',c:26,r:17,when:{entrada:'204'}}, {code:'M',c:27,r:17,when:{entrada:'204'}}, {code:'L',c:25,r:17,when:{entrada:'204'}}, {code:'T',c:24,r:17,when:{entrada:'204'}},

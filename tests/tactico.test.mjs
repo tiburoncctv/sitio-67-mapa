@@ -48,3 +48,15 @@ test('stock de la armería según la última especificación', () => {
   const q = Object.fromEntries(a.contacts.filter((k) => k.kind === 'item').map((k) => [k.name, k.qty]));
   assert.deepEqual(q, { 'Carabina compacta de reserva': 1, 'Fusil de reconocimiento de reserva': 1, 'Lanzador de contención ÍGNEO': 1, 'Botiquín de campo': 6, 'Botiquín de trauma': 2, 'Placa reforzada': 4, 'Granada incendiaria': 3, 'Granada de humo': 3, 'Espuma de sellado': 2, 'Carga térmica portátil': 2, 'Carga incendiaria potenciada': 4, 'Cable de rescate': 1, 'Visor térmico': 1, 'Dron de reconocimiento': 1 });
 });
+
+test('sanitizeStore conserva amenazas añadidas válidas y descarta las corruptas', () => {
+  const raw = blankStore();
+  raw.scen.camara = { extra: [
+    { id: 'xabc1', type: 'errante', code: 'E1', c: 3, r: 4 },
+    { id: 'xabc2', type: 'dragón', code: 'E2', c: 3, r: 4 },
+    { id: 'malo', type: 'corredor', code: 'E3', c: 3, r: 4 },
+    { id: 'xabc4', type: 'ariete', code: 'Z9', c: 3, r: 4 },
+  ] };
+  const out = sanitizeStore(raw, new Set(['camara']));
+  assert.deepEqual(out.scen.camara.extra.map((x) => x.id), ['xabc1']);
+});

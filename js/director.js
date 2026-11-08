@@ -95,7 +95,8 @@ export function startDirector(data) {
   });
   $('#btn-undo').addEventListener('click', undo);
   $('#btn-legend').addEventListener('click', toggleLegend);
-  $('#btn-enemies').addEventListener('click', toggleEnemies);
+  $('#btn-enemies').addEventListener('click', () => toggleEnemies('primary'));
+  $('#btn-present').addEventListener('click', () => togglePresent(true));
   $('#btn-zoom-in').addEventListener('click', () => map.zoomBy(1.25));
   $('#btn-zoom-out').addEventListener('click', () => map.zoomBy(0.8));
   $('#btn-fit').addEventListener('click', () => map.fit());
@@ -127,15 +128,25 @@ export function startDirector(data) {
 
   // ------------------------------------------------------------ teclado
   document.addEventListener('keydown', (e) => {
-    if (D.clean) { if (e.key === 'Escape' && !document.fullscreenElement) { e.preventDefault(); exitClean(); } return; }
+    if (D.clean) {
+      if ((e.key === 'Escape' && !document.fullscreenElement) || (e.key.toLowerCase() === 'h' && !e.ctrlKey && !e.metaKey && !e.altKey)) { e.preventDefault(); exitClean(); }
+      return;
+    }
     if ($('#dlg').open) return;
+    if (D.prefs.scenario && !isEditable(e.target)) {
+      const msg = tview.hotkey(e);
+      if (msg) { e.preventDefault(); flash(msg); publishNow(); return; }
+    }
     if (!e.ctrlKey && !e.metaKey && !e.altKey && !isEditable(e.target)) {
       const k = e.key.toLowerCase();
       if (k === 'l') { e.preventDefault(); toggleLegend(); return; }
-      if (k === 'e') { e.preventDefault(); toggleEnemies(); return; }
+      if (k === 'e') { e.preventDefault(); toggleEnemies('primary'); return; }
+      if (k === 'r' && D.prefs.scenario) { e.preventDefault(); toggleEnemies('secondary'); return; }
+      if (k === 'h') { e.preventDefault(); togglePresent(); return; }
     }
     if (e.key === 'Escape') {
       if (D.prefs.scenario && tview.cancelPlacing()) { e.preventDefault(); return; }
+      if (D.present) { e.preventDefault(); togglePresent(false); return; }
       if (D.tool !== 'select') { e.preventDefault(); setTool('select'); return; }
       if (D.dragPreview) return;
       if (D.sel && !isEditable(e.target)) { select(null); }
@@ -171,6 +182,7 @@ export function startDirector(data) {
     document.body.classList.toggle('tac-mode', !!next);
     $('#tac-host').hidden = !next; $('#tac-panel').hidden = !next;
     scenSel.value = next || '';
+    if (!next && D.present) togglePresent(false);
     if (next) { setTool('select'); tview.setScenario(SCENARIO_BY_ID.get(next)); tview.setLegend(D.prefs.showLegend); $('#tooltip').hidden = true; }
     persist(); renderAll(); publishNow();
   }
@@ -179,15 +191,23 @@ export function startDirector(data) {
     tview.setLegend(D.prefs.showLegend); persist(); publishNow(); renderTxStatus(); renderShortcuts();
     flash(D.prefs.showLegend ? 'Leyenda visible' : 'Leyenda oculta');
   }
-  function toggleEnemies() {
-    tac.flags.hideEnemies = !tac.flags.hideEnemies; saveTac();
-    if (D.prefs.scenario) tview.refresh();
-    publishNow(); renderShortcuts();
-    flash(tac.flags.hideEnemies ? 'Amenazas ocultas' : 'Amenazas visibles');
+  function toggleEnemies(which = 'primary') {
+    if (!D.prefs.scenario) return;
+    const msg = tview.toggleEnemies(which);
+    publishNow(); renderTxStatus();
+    if (msg) flash(msg);
+  }
+  // H · modo transmisión: oculta toda la interfaz salvo la cabecera del escenario.
+  // En el plano general reutiliza el modo limpio.
+  function togglePresent(on = !D.present) {
+    if (!D.prefs.scenario) { if (on) enterClean(); return; }
+    D.present = on;
+    document.body.classList.toggle('present', on);
+    $('#tooltip').hidden = true;
+    tview.setPresent(on);
   }
   function renderShortcuts() {
     const bl = $('#btn-legend'); bl.setAttribute('aria-pressed', String(D.prefs.showLegend)); bl.firstChild.textContent = D.prefs.showLegend ? 'Leyenda ' : 'Leyenda oculta ';
-    const be = $('#btn-enemies'); be.setAttribute('aria-pressed', String(tac.flags.hideEnemies)); be.firstChild.textContent = tac.flags.hideEnemies ? 'Amenazas ocultas ' : 'Ocultar amenazas ';
   }
 
   function setTool(t) {
@@ -476,7 +496,6 @@ export function startDirector(data) {
     const parts = [p.scenario ? `Jugadores ven: escenario ${SCENARIO_BY_ID.get(p.scenario).short}` : `Jugadores ven: ${floorLabel(data, p.floor)}`];
     if (!p.scenario) parts.push(p.frame ? 'con tu encuadre' : 'plano completo');
     if (!p.showLegend) parts.push('sin leyenda');
-    if (p.scenario && tac.flags.hideEnemies) parts.push('amenazas ocultas');
     parts.push(p.cardId ? 'con ficha' : 'sin ficha');
     if (D.hold) parts.push('(vista retenida)');
     $('#tx-status').textContent = parts.join(' · ');

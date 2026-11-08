@@ -6,6 +6,7 @@ export default {
   meta:'NIVEL −2 · 202 · ACCESO AL SUR', cols:20, rows:14, margin:{b:62},
   legend:['wall','tall','low','door','ag','en','obj'],
   states:[ {key:'o1', label:'MÓDULO DEL REGISTRO (O1)', def:'in', options:[['in','EN EL ARMARIO'],['out','RETIRADO']]} ],
+  hotkeys:[['o1',null]],
   starts:[ {code:'C',c:10,r:13}, {code:'M',c:11,r:13}, {code:'L',c:10,r:14}, {code:'T',c:11,r:14} ],
   initialSel:'o1',
   notes:[
