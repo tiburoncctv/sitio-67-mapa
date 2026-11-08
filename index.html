@@ -8,6 +8,7 @@
 <meta name="robots" content="noindex">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 1 L15 14 H1 Z' fill='%2338e1ff'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles-tactico.css">
 </head>
 <body class="mode-boot">
 <a class="skip" href="#panel">Saltar al panel</a>
@@ -17,22 +18,28 @@
   <header class="topbar">
     <div class="brand" aria-label="Fundación SCP, Sitio 67, Beta 7"><span>FUNDACIÓN SCP</span><i>/</i><span>SITIO-67</span><i>/</i><span>BETA-7</span></div>
     <nav class="floors" role="tablist" aria-label="Planta consultada" id="floor-tabs"></nav>
+    <label class="scen-pick">Escenario táctico <select id="scen-select" aria-describedby="scen-help"><option value="">— Plano general —</option></select></label>
+    <span id="scen-help" hidden>Elegir un escenario muestra su mapa de combate a escala en lugar del plano general.</span>
     <button type="button" class="beta-loc" id="beta-loc" title="Ir a la planta de Beta-7">Beta-7: sin ubicar</button>
     <span class="save-status" id="save-status" role="status" aria-live="polite"></span>
   </header>
 
   <div class="toolbar" role="toolbar" aria-label="Herramientas del mapa">
-    <div class="tool-group" aria-label="Herramientas">
+    <div class="tool-group floor-only" aria-label="Herramientas">
       <button type="button" class="tool" data-tool="select" aria-pressed="true" title="Seleccionar y arrastrar anotaciones">Seleccionar</button>
       <button type="button" class="tool" data-tool="block" aria-pressed="false" title="Colocar una marca de bloqueo (Esc cancela)"><span class="ico ico-block" aria-hidden="true"></span>Bloqueo</button>
       <button type="button" class="tool" data-tool="passage" aria-pressed="false" title="Marcar dos puntos de un paso descubierto (Esc cancela)"><span class="ico ico-passage" aria-hidden="true"></span>Paso descubierto</button>
       <button type="button" class="tool" data-tool="marker" aria-pressed="false" title="Colocar o trasladar a Beta-7 (Esc cancela)"><span class="ico ico-marker" aria-hidden="true"></span>Ubicar Beta-7</button>
       <button type="button" id="btn-marker-vis" aria-pressed="true">Ocultar Beta-7</button>
     </div>
-    <div class="tool-group">
+    <div class="tool-group" aria-label="Atajos de transmisión">
+      <button type="button" id="btn-legend" aria-pressed="true" title="Mostrar u ocultar toda la leyenda (L)">Leyenda <kbd>L</kbd></button>
+      <button type="button" class="scen-only" id="btn-enemies" aria-pressed="false" title="Ocultar o mostrar todas las amenazas del escenario (E)">Ocultar amenazas <kbd>E</kbd></button>
+    </div>
+    <div class="tool-group floor-only">
       <button type="button" id="btn-undo" title="Deshacer (Ctrl/Cmd+Z)">↶ Deshacer <span class="count" id="undo-count">0</span></button>
     </div>
-    <div class="tool-group" aria-label="Zoom">
+    <div class="tool-group floor-only" aria-label="Zoom">
       <button type="button" id="btn-zoom-out" aria-label="Alejar">−</button>
       <span class="zoom-val" id="zoom-val" aria-live="off">1.00×</span>
       <button type="button" id="btn-zoom-in" aria-label="Acercar">+</button>
@@ -49,6 +56,7 @@
       <div class="tool-hint" id="tool-hint" hidden></div>
       <div class="tooltip" id="tooltip" hidden></div>
       <div class="map-floor-name" id="map-floor-name"></div>
+      <div class="tac-host" id="tac-host" hidden></div>
     </section>
 
     <aside class="panel" id="panel" tabindex="-1" aria-label="Panel de dirección">
@@ -58,21 +66,23 @@
         <div class="row"><button type="button" id="btn-clean-mode">Usar modo limpio en esta ventana</button><button type="button" id="btn-popup-dismiss" class="ghost">Cerrar</button></div>
       </div>
 
-      <section class="card sel-card" aria-labelledby="sel-title">
+      <div class="card tac-card" id="tac-panel" hidden></div>
+
+      <section class="card sel-card floor-only" aria-labelledby="sel-title">
         <h2 id="sel-title" class="sec-title">Selección</h2>
         <div id="sel-body"></div>
-        <label class="switch"><input type="checkbox" id="chk-show-card"> <span>Mostrar ficha en transmisión</span></label>
       </section>
 
       <section class="card" aria-labelledby="tx-title">
         <h2 id="tx-title" class="sec-title">Transmisión</h2>
         <label class="switch"><input type="checkbox" id="chk-share-frame"> <span>Los jugadores siguen mi encuadre</span></label>
         <label class="switch"><input type="checkbox" id="chk-hold"> <span>Retener la vista de jugadores <small>(puedo consultar otras plantas sin que la vean)</small></span></label>
-        <label class="switch"><input type="checkbox" id="chk-legend"> <span>Leyenda en transmisión</span></label>
+        <label class="switch"><input type="checkbox" id="chk-show-card"> <span>Mostrar ficha de la selección en transmisión</span></label>
+        <label class="switch"><input type="checkbox" id="chk-legend"> <span>Leyenda en transmisión <small>(atajo L)</small></span></label>
         <p class="muted small" id="tx-status"></p>
       </section>
 
-      <section class="card" aria-labelledby="list-title">
+      <section class="card floor-only" aria-labelledby="list-title">
         <h2 id="list-title" class="sec-title">Elementos de la planta</h2>
         <div id="el-list" class="el-list"></div>
       </section>
@@ -104,16 +114,17 @@
     <div class="player-beta" id="player-beta"></div>
   </header>
   <aside class="legend" id="legend" aria-label="Leyenda">
-    <div class="lg"><svg viewBox="0 0 30 20" aria-hidden="true"><path d="M15 2 L26 18 L4 18 Z" fill="#38e1ff" stroke="#fff" stroke-width="1.5"/></svg>Beta-7</div>
-    <div class="lg"><svg viewBox="0 0 30 20" aria-hidden="true"><rect x="2" y="3" width="26" height="14" fill="none" stroke="#7ee2a8" stroke-width="2.5"/></svg>✓ Transitable</div>
-    <div class="lg"><svg viewBox="0 0 30 20" aria-hidden="true"><rect x="2" y="3" width="26" height="14" fill="url(#lg-hatch)" stroke="#ff6b6b" stroke-width="2.5"/><defs><pattern id="lg-hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#ff6b6b" stroke-width="2"/></pattern></defs></svg>✕ Bloqueado</div>
-    <div class="lg"><svg viewBox="0 0 30 20" aria-hidden="true"><rect x="2" y="3" width="26" height="14" fill="url(#lg-dots)" stroke="#ff5fd2" stroke-width="2" stroke-dasharray="4 3"/><defs><pattern id="lg-dots" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.4" fill="#ff5fd2"/></pattern></defs></svg>◆ Contaminación confirmada</div>
-    <div class="lg"><svg viewBox="0 0 30 20" aria-hidden="true"><rect x="2" y="3" width="26" height="14" fill="none" stroke="#f5b84a" stroke-width="1.5" stroke-dasharray="2 2"/><text x="15" y="14.5" text-anchor="middle" font-size="11" font-weight="700" fill="#f5b84a">?</text></svg>Sin marca: sin verificar</div>
-    <div class="lg"><svg viewBox="0 0 30 20" aria-hidden="true"><polygon points="22.4,13.1 18.1,17.4 11.9,17.4 7.6,13.1 7.6,6.9 11.9,2.6 18.1,2.6 22.4,6.9" fill="#d63a3a" stroke="#fff" stroke-width="1.3"/><path d="M12 7 L18 13 M18 7 L12 13" stroke="#fff" stroke-width="2"/></svg>Bloqueo puntual</div>
-    <div class="lg"><svg viewBox="0 0 30 20" aria-hidden="true"><line x1="2" y1="10" x2="28" y2="10" stroke="#38e1ff" stroke-width="3" stroke-dasharray="5 3"/></svg>Paso descubierto</div>
+    <div class="lg"><svg viewBox="0 0 30 20" aria-hidden="true"><circle cx="15" cy="11" r="6" fill="#070808" stroke="#e6dc4f" stroke-width="2.5"/><circle cx="15" cy="11" r="2" fill="#e6dc4f"/><path d="M11 1 h8 l-4 5 z" fill="#ff3fa0"/></svg>Beta-7</div>
+    <div class="lg"><svg viewBox="0 0 30 20" aria-hidden="true"><rect x="2" y="3" width="26" height="14" fill="none" stroke="#48d8d8" stroke-width="2.5"/></svg>✓ Transitable</div>
+    <div class="lg"><svg viewBox="0 0 30 20" aria-hidden="true"><defs><pattern id="lg-hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#ff6a2a" stroke-width="2"/></pattern></defs><rect x="2" y="3" width="26" height="14" fill="url(#lg-hatch)" stroke="#ff6a2a" stroke-width="2.5"/></svg>✕ Bloqueado</div>
+    <div class="lg"><svg viewBox="0 0 30 20" aria-hidden="true"><defs><pattern id="lg-stripes" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#ff3fa0" stroke-width="1.6"/></pattern></defs><rect x="2" y="3" width="26" height="14" fill="url(#lg-stripes)" stroke="#ff3fa0" stroke-width="2" stroke-dasharray="4 3"/></svg>◆ Contaminación confirmada</div>
+    <div class="lg"><svg viewBox="0 0 30 20" aria-hidden="true"><rect x="2" y="3" width="26" height="14" fill="none" stroke="#e6dc4f" stroke-width="1.5" stroke-dasharray="2 2"/><text x="15" y="14.5" text-anchor="middle" font-size="11" font-weight="700" fill="#e6dc4f">?</text></svg>Sin marca: sin verificar</div>
+    <div class="lg"><svg viewBox="0 0 30 20" aria-hidden="true"><polygon points="15,2 25,18 5,18" fill="#070808" stroke="#ff6a2a" stroke-width="2"/><path d="M15 8 V12 M15 14.5 V15" stroke="#ff6a2a" stroke-width="2.2" stroke-linecap="round"/></svg>Bloqueo puntual</div>
+    <div class="lg"><svg viewBox="0 0 30 20" aria-hidden="true"><line x1="2" y1="10" x2="28" y2="10" stroke="#48d8d8" stroke-width="3" stroke-dasharray="5 3"/></svg>Paso descubierto</div>
     <p class="lg-note">Plano original. La condición actual puede diferir. «No registrada» no significa segura.</p>
   </aside>
   <article class="pcard" id="pcard" hidden aria-live="polite"></article>
+  <div class="player-tac" id="player-tac" hidden></div>
   <button type="button" class="fs-btn" id="btn-fullscreen" aria-label="Pantalla completa">⛶ Pantalla completa</button>
   <button type="button" class="clean-exit" id="btn-clean-exit" hidden>Salir del modo limpio (Esc)</button>
   <div class="player-wait" id="player-wait" hidden>Esperando al panel de dirección…</div>

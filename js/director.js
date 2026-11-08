@@ -8,6 +8,11 @@ import { MapView } from './mapview.js';
 import { describe, floorLabel, passBadge, contBadge, KIND_TEXT } from './describe.js';
 import { PlayerScreen } from './player.js';
 import { el, $, isEditable, dialog, download, stamp } from './ui.js';
+import { SCENARIOS, SCENARIO_BY_ID, scenariosForRoom } from './tactico/registro.js';
+import { readTactical, writeTactical, wrapStore, sanitizeStore, blankStore, TAC_KEY } from './tactico/store.js';
+import { createTacticalView } from './tactico/engine.js';
+
+const SCEN_IDS = new Set(SCENARIOS.map((x) => x.id));
 
 const TOOL_HINT = {
   block: 'Bloqueo: haz clic en el plano para colocar la marca · Esc cancela',
@@ -54,12 +59,25 @@ export function startDirector(data) {
     onToolMove: (pt) => { if (D.tool === 'passage' && D.pending.length === 1) map.showTemp('passage', [D.pending[0], clampPoint(pt.x, pt.y)]); },
     onViewChange: () => { updateZoomLabel(); schedulePublish(); },
   });
-  const cleanScreen = new PlayerScreen(data);
+  // ------------------------------------------------------------ escenarios tácticos
+  let tac = wrapStore(readTactical(SCEN_IDS));
+  const saveTac = () => { if (!writeTactical(tac.data)) flash('No se pudo guardar el escenario en este navegador'); channel.post({ type: 'tactico', payload: tac.data }); };
+  const tview = createTacticalView({
+    mapHost: $('#tac-host'), panelHost: $('#tac-panel'), mode: 'director', getStore: () => tac,
+    onChange: () => { saveTac(); publishNow(); renderTxStatus(); },
+    onSelect: () => publishNow(),
+  });
+  const scenSel = $('#scen-select');
+  for (const sc of SCENARIOS) scenSel.appendChild(el('option', { value: sc.id }, sc.short));
+  scenSel.addEventListener('change', () => setScenario(scenSel.value || null));
+  if (D.prefs.scenario && !SCENARIO_BY_ID.has(D.prefs.scenario)) D.prefs.scenario = null;
+
+  const cleanScreen = new PlayerScreen(data, () => tac);
 
   // ------------------------------------------------------------ pestañas de planta
   const tabs = $('#floor-tabs');
   for (const f of data.floors) {
-    tabs.appendChild(el('button', { type: 'button', role: 'tab', class: 'floor-tab', dataset: { floor: f.id }, 'aria-selected': 'false', title: f.title, onclick: () => setFloor(f.id) },
+    tabs.appendChild(el('button', { type: 'button', role: 'tab', class: 'floor-tab', dataset: { floor: f.id }, 'aria-selected': 'false', title: f.title, onclick: () => { setScenario(null); setFloor(f.id); } },
       el('span', { class: 'ft-short' }, f.short), el('span', { class: 'ft-name' }, f.name)));
   }
   tabs.addEventListener('keydown', (e) => {
@@ -76,6 +94,8 @@ export function startDirector(data) {
     const c = clone(D.content); c.marker.visible = !c.marker.visible; commit(c);
   });
   $('#btn-undo').addEventListener('click', undo);
+  $('#btn-legend').addEventListener('click', toggleLegend);
+  $('#btn-enemies').addEventListener('click', toggleEnemies);
   $('#btn-zoom-in').addEventListener('click', () => map.zoomBy(1.25));
   $('#btn-zoom-out').addEventListener('click', () => map.zoomBy(0.8));
   $('#btn-fit').addEventListener('click', () => map.fit());
@@ -96,7 +116,7 @@ export function startDirector(data) {
   });
   function bindCheck(sel, key) {
     const c = $(sel); c.checked = !!D.prefs[key];
-    c.addEventListener('change', () => { D.prefs[key] = c.checked; persist(); publishNow(); renderTxStatus(); });
+    c.addEventListener('change', () => { D.prefs[key] = c.checked; persist(); publishNow(); renderTxStatus(); renderShortcuts(); });
   }
 
   // ------------------------------------------------------------ respaldo
@@ -109,7 +129,13 @@ export function startDirector(data) {
   document.addEventListener('keydown', (e) => {
     if (D.clean) { if (e.key === 'Escape' && !document.fullscreenElement) { e.preventDefault(); exitClean(); } return; }
     if ($('#dlg').open) return;
+    if (!e.ctrlKey && !e.metaKey && !e.altKey && !isEditable(e.target)) {
+      const k = e.key.toLowerCase();
+      if (k === 'l') { e.preventDefault(); toggleLegend(); return; }
+      if (k === 'e') { e.preventDefault(); toggleEnemies(); return; }
+    }
     if (e.key === 'Escape') {
+      if (D.prefs.scenario && tview.cancelPlacing()) { e.preventDefault(); return; }
       if (D.tool !== 'select') { e.preventDefault(); setTool('select'); return; }
       if (D.dragPreview) return;
       if (D.sel && !isEditable(e.target)) { select(null); }
@@ -137,6 +163,31 @@ export function startDirector(data) {
     persist();
     renderAll();
     publishNow();
+  }
+
+  function setScenario(id) {
+    const next = id && SCENARIO_BY_ID.has(id) ? id : null;
+    D.prefs.scenario = next;
+    document.body.classList.toggle('tac-mode', !!next);
+    $('#tac-host').hidden = !next; $('#tac-panel').hidden = !next;
+    scenSel.value = next || '';
+    if (next) { setTool('select'); tview.setScenario(SCENARIO_BY_ID.get(next)); tview.setLegend(D.prefs.showLegend); $('#tooltip').hidden = true; }
+    persist(); renderAll(); publishNow();
+  }
+  function toggleLegend() {
+    D.prefs.showLegend = !D.prefs.showLegend; $('#chk-legend').checked = D.prefs.showLegend;
+    tview.setLegend(D.prefs.showLegend); persist(); publishNow(); renderTxStatus(); renderShortcuts();
+    flash(D.prefs.showLegend ? 'Leyenda visible' : 'Leyenda oculta');
+  }
+  function toggleEnemies() {
+    tac.flags.hideEnemies = !tac.flags.hideEnemies; saveTac();
+    if (D.prefs.scenario) tview.refresh();
+    publishNow(); renderShortcuts();
+    flash(tac.flags.hideEnemies ? 'Amenazas ocultas' : 'Amenazas visibles');
+  }
+  function renderShortcuts() {
+    const bl = $('#btn-legend'); bl.setAttribute('aria-pressed', String(D.prefs.showLegend)); bl.firstChild.textContent = D.prefs.showLegend ? 'Leyenda ' : 'Leyenda oculta ';
+    const be = $('#btn-enemies'); be.setAttribute('aria-pressed', String(tac.flags.hideEnemies)); be.firstChild.textContent = tac.flags.hideEnemies ? 'Amenazas ocultas ' : 'Ocultar amenazas ';
   }
 
   function setTool(t) {
@@ -277,6 +328,7 @@ export function startDirector(data) {
 
   function exportJSON() {
     const obj = buildSave({ content: D.content, prefs: D.prefs, mapVersion: data.mapVersion });
+    obj.tactico = tac.data;
     download(`sitio67-respaldo-${stamp()}.json`, JSON.stringify(obj, null, 2));
     flash('Respaldo exportado');
   }
@@ -297,7 +349,8 @@ export function startDirector(data) {
         `Archivo: ${file.name}${v.data.savedAt ? ' · guardado ' + new Date(v.data.savedAt).toLocaleString('es') : ''}`,
         el('ul', {}, el('li', {}, `${s.open} transitables, ${s.blocked} bloqueados, ${s.contaminated} con contaminación, ${s.labels} etiquetas`),
           el('li', {}, `${s.blocks} bloqueos puntuales y ${s.passages} pasos descubiertos`),
-          el('li', {}, s.marker ? `Beta-7 en ${floorLabel(data, s.marker)}` : 'Beta-7 sin ubicar')),
+          el('li', {}, s.marker ? `Beta-7 en ${floorLabel(data, s.marker)}` : 'Beta-7 sin ubicar'),
+          el('li', {}, parsed.tactico ? 'Incluye el estado de los escenarios tácticos (iconos, estados, revelaciones e inventario)' : 'Sin estado de escenarios tácticos: se conserva el actual')),
         'Esto reemplaza todos los estados, anotaciones y el marcador actuales. Puedes deshacerlo con «Deshacer».',
       ],
       buttons: [{ label: 'Cancelar', value: 'cancel', class: 'default' }, { label: 'Reemplazar', value: 'ok', class: 'danger' }],
@@ -305,7 +358,9 @@ export function startDirector(data) {
     if (ans !== 'ok') { flash('Importación cancelada'); return; }
     D.prefs = { ...v.data.prefs };
     D.sel = null;
+    if (parsed.tactico) { tac = wrapStore(sanitizeStore(parsed.tactico, SCEN_IDS)); saveTac(); }
     commit(v.data.content);
+    setScenario(D.prefs.scenario && SCENARIO_BY_ID.has(D.prefs.scenario) ? D.prefs.scenario : null);
     syncChecks(); map.setFloor(D.prefs.floor); map.fit(); renderAll(); publishNow();
     flash('Respaldo importado');
   }
@@ -319,7 +374,8 @@ export function startDirector(data) {
         el('ul', {}, el('li', {}, `estados de paso y contaminación de ${Object.keys(D.content.elements).length} elementos y sus etiquetas`),
           el('li', {}, `${s.blocks} bloqueos puntuales y ${s.passages} pasos descubiertos`),
           el('li', {}, s.marker ? `la posición de Beta-7 (${floorLabel(data, s.marker)})` : 'el marcador de Beta-7'),
-          el('li', {}, 'las preferencias de vista (vuelve a Superficie, sin ficha en transmisión)')),
+          el('li', {}, 'las preferencias de vista (vuelve a Superficie, sin ficha en transmisión)'),
+          el('li', {}, 'el estado de los escenarios tácticos: iconos insertados, posiciones, estados, revelaciones e inventario')),
         'Los planos originales y las descripciones no cambian. No se tocan datos de otras páginas. Se recomienda exportar un respaldo antes.',
       ],
       buttons: [
@@ -331,7 +387,9 @@ export function startDirector(data) {
     if (ans !== 'ok') return;
     D.prefs = initialPrefs(); D.sel = null; D.hold = false; D.heldPub = null; $('#chk-hold').checked = false;
     setTool('select');
+    tac = wrapStore(blankStore()); saveTac();
     commit(initialContent());
+    setScenario(null);
     syncChecks(); map.setFloor('S'); map.fit(); renderAll(); publishNow();
     flash('Sesión reiniciada');
   }
@@ -346,6 +404,8 @@ export function startDirector(data) {
       frame: D.prefs.shareFrame ? round(map.getFrame()) : null,
       cardId: showCard ? D.sel : null,
       showLegend: D.prefs.showLegend,
+      scenario: D.prefs.scenario,
+      scenarioSel: D.prefs.scenario && D.prefs.showCard ? tview.selection : null,
     };
   }
   function currentPublished() {
@@ -361,6 +421,7 @@ export function startDirector(data) {
     const p = payload();
     channel.post({ type: 'sync', payload: p });
     if (D.clean) cleanScreen.update(D.content, cleanPublishedLocal(p.published));
+    if (D.clean) cleanScreen.refreshTactical();
     pendingStore = true; scheduleStore();
   }
   function cleanPublishedLocal(pub) { return { ...pub }; }
@@ -395,7 +456,7 @@ export function startDirector(data) {
   }
 
   // ------------------------------------------------------------ renderizado
-  function renderAll() { renderMap(); renderTabs(); renderSelection(); renderList(); renderBeta(); renderUndo(); renderTxStatus(); renderSaveStatus(); updateZoomLabel(); }
+  function renderAll() { renderShortcuts(); renderMap(); renderTabs(); renderSelection(); renderList(); renderBeta(); renderUndo(); renderTxStatus(); renderSaveStatus(); updateZoomLabel(); }
   function renderMap() { map.render(D.content, D.sel ? { id: D.sel } : null, {}); $('#map-floor-name').textContent = data.floorById.get(D.prefs.floor).title; }
   function renderTabs() { tabs.querySelectorAll('.floor-tab').forEach((b) => { const on = b.dataset.floor === D.prefs.floor; b.setAttribute('aria-selected', String(on)); b.tabIndex = on ? 0 : -1; }); }
   function renderUndo() { $('#undo-count').textContent = String(D.history.size); $('#btn-undo').disabled = D.history.size === 0; }
@@ -412,8 +473,10 @@ export function startDirector(data) {
   }
   function renderTxStatus() {
     const p = currentPublished();
-    const parts = [`Jugadores ven: ${floorLabel(data, p.floor)}`];
-    parts.push(p.frame ? 'con tu encuadre' : 'plano completo');
+    const parts = [p.scenario ? `Jugadores ven: escenario ${SCENARIO_BY_ID.get(p.scenario).short}` : `Jugadores ven: ${floorLabel(data, p.floor)}`];
+    if (!p.scenario) parts.push(p.frame ? 'con tu encuadre' : 'plano completo');
+    if (!p.showLegend) parts.push('sin leyenda');
+    if (p.scenario && tac.flags.hideEnemies) parts.push('amenazas ocultas');
     parts.push(p.cardId ? 'con ficha' : 'sin ficha');
     if (D.hold) parts.push('(vista retenida)');
     $('#tx-status').textContent = parts.join(' · ');
@@ -427,6 +490,8 @@ export function startDirector(data) {
     const m = describe(data, D.content, D.sel);
     if (!m) { body.replaceChildren(el('p', { class: 'muted' }, 'Selecciona una sala, tramo o conexión en el plano o en la lista de abajo.')); return; }
     const nodes = [el('div', { class: 'pc-kind' }, `${m.kindText} · ${floorLabel(data, m.floor)}`), el('h3', { class: 'sel-name' }, m.title), el('p', { class: 'sel-desc' }, m.desc)];
+    const scs = m.kind === 'room' ? scenariosForRoom(m.id) : [];
+    if (scs.length) nodes.push(el('div', { class: 'row wrap' }, scs.map((sc) => el('button', { type: 'button', class: 'primary', onclick: () => setScenario(sc.id) }, `Abrir escenario: ${sc.short}`))));
     if (m.stateful) nodes.push(...stateControls(m));
     else if (m.kind === 'core') {
       nodes.push(el('p', { class: 'small muted' }, 'Bloquear un medio no bloquea los demás. Elige uno para anotarlo:'));
@@ -518,10 +583,13 @@ export function startDirector(data) {
   map.setFloor(D.prefs.floor);
   map.fit();
   setTool('select');
+  setScenario(D.prefs.scenario);
   renderAll();
   publishNow();
+  // Otra ventana de dirección del mismo navegador cambió los escenarios.
+  window.addEventListener('storage', (e) => { if (e.key === TAC_KEY) { tac = wrapStore(readTactical(SCEN_IDS)); if (D.prefs.scenario) tview.refresh(); renderShortcuts(); } });
   // Estado expuesto solo para pruebas automatizadas locales (no contiene secretos).
-  window.__sitio67 = { get content() { return clone(D.content); }, get prefs() { return clone(D.prefs); }, map, get storage() { return D.storage; } };
+  window.__sitio67 = { get content() { return clone(D.content); }, get prefs() { return clone(D.prefs); }, map, get storage() { return D.storage; }, get tactico() { return clone(tac.data); } };
 }
 
 function round(f) { const r = (n) => Math.round(n * 10) / 10; return { cx: r(f.cx), cy: r(f.cy), w: r(f.w), h: r(f.h) }; }

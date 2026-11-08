@@ -1,6 +1,6 @@
 # SITIO-67 · Mapa de dirección
 
-Web estática para dirigir la exploración de SITIO-67 y transmitir el plano a los jugadores por videollamada. Sin cuentas, sin servidor y sin servicios externos: todo ocurre en el navegador del director.
+Web estática para dirigir la exploración de SITIO-67 y transmitir el plano a los jugadores por videollamada. Incluye el plano general de las cuatro plantas y siete escenarios de combate a escala (cuadrícula de 1,5 m) con iconos que el director coloca a mano. Sin cuentas, sin servidor y sin servicios externos: todo ocurre en el navegador del director.
 
 Dirección prevista al activar GitHub Pages: **https://tiburoncctv.github.io/sitio-67-mapa/**
 
@@ -70,9 +70,41 @@ Los núcleos **A** y **B** tienen indicadores separados: A · escalera, A · asc
 
 **Deshacer** (o Ctrl/Cmd+Z fuera de campos de texto) revierte hasta 20 cambios de estados, etiquetas, anotaciones, marcador, importación o reinicio. Zoom, planta y selección no consumen historial. El historial no se conserva al recargar.
 
+## Escenarios tácticos
+
+Selector **Escenario táctico** en la barra superior, o el botón «Abrir escenario» de la ficha de una sala que tenga uno. Pulsar cualquier planta vuelve al plano general. Lo que eliges se transmite igual que una planta (salvo con «Retener la vista de jugadores»).
+
+| Escenario | Cuadrícula | Planta · salas |
+|---|---|---|
+| Superficie · patio de servicio | 32 × 24 | S · S01–S10 (llegada / extracción sin jefe / extracción con jefe final) |
+| 104 / 105 · Enfermería y cuarentena | 24 × 16 | −1 |
+| 202 · Archivo | 20 × 14 | −2 |
+| 203 / 204 · Laboratorios | 28 × 18 | −2 (pared intacta / grietas / brecha) |
+| 207 · Armería | 14 × 10 | −2 (equipo con fichas y retirada manual) |
+| 302 / 303 · Bombas y control | 24 × 18 | −3 (válvula V y panel P) |
+| 307 · Cámara de contención | 28 × 22 | −3 (masa activa/aturdida, C1, C2, secuencia, descarga) |
+
+- **Beta-7 se inserta a mano.** Panel «Beta-7 · insertar»: C, M, L, T, **TE** (técnico de contención) y **D** (demoliciones). Pulsa un agente y luego una casilla. Con teclado, Enter lo coloca junto a la entrada propuesta. Ningún agente aparece solo; «Retirar del mapa» lo quita.
+- **Mover iconos:** arrastra cualquier agente, amenaza, persona u objetivo, o enfócalo con Tab y usa las flechas. La posición encaja en la cuadrícula y se guarda; «Restablecer posición» devuelve el icono a su casilla de diseño.
+- **Revelación:** cada amenaza, persona u objetivo se revela a los jugadores desde su ficha. Lo no revelado o marcado como baja no se transmite.
+- **Estados, capas y notas de dirección** en el panel. Nada cambia solo: no hay movimiento, tiradas, daño ni eventos automáticos.
+- **PV de la masa:** anotación compartida entre la cámara 307 y el patio.
+
+### Atajos de teclado
+
+| Tecla | Acción |
+|---|---|
+| **L** | Muestra u oculta toda la leyenda (plano general y escenarios, dirección y transmisión) |
+| **E** | Oculta o muestra todas las amenazas del escenario, en dirección y en transmisión. Los jugadores no ven ningún aviso de que están ocultas |
+| Flechas | Mueven el icono enfocado una casilla |
+| Esc | Cancela la inserción de un agente o la herramienta activa |
+
+Los atajos no actúan mientras escribes en un campo de texto.
+
 ## Guardado, respaldo y reinicio
 
-- Guardado automático en `localStorage`, clave exclusiva `sitio67:mapa:v1` (no toca otras páginas del dominio). Se guardan datos, no HTML.
+- Guardado automático en `localStorage`, claves exclusivas `sitio67:mapa:v1` (plano general) y `sitio67:tactico:v1` (escenarios). No toca otras páginas del dominio. Se guardan datos, no HTML.
+- El respaldo JSON incluye también el estado de los escenarios (iconos, estados, revelaciones e inventario). Al importarlo se sanea: escenarios, agentes y valores desconocidos se descartan.
 - **Borrar los datos del navegador elimina la sesión.** El respaldo portable es el JSON exportado.
 - **Exportar respaldo JSON** descarga la sesión. **Importar respaldo…** valida versión, IDs, tipos, valores y coordenadas, muestra un resumen y pide confirmación. Un archivo inválido no cambia nada.
 - Si el navegador no permite guardar, la app sigue funcionando en memoria y avisa en el panel (nunca en la vista de jugadores): exporta antes de cerrar.
@@ -93,11 +125,17 @@ Los núcleos **A** y **B** tienen indicadores separados: A · escalera, A · asc
   js/player.js     vista de jugadores
   js/describe.js   fichas públicas
   js/ui.js         utilidades DOM (solo texto, sin innerHTML)
+  js/tactico/      escenarios de combate a escala
+    engine.js      motor: dibujo SVG, capas, estados, iconos, fichas (todo texto escapado)
+    store.js       guardado y saneado del estado táctico
+    registro.js    lista de escenarios y su relación con plantas y salas
+    escenarios/    un archivo de datos por escenario
+  styles-tactico.css  estilos aislados bajo .tac
   data/rooms.json  38 salas: código, nombre, descripción literal y área
   data/routes.json tramos y conexiones con ID y geometría
   assets/maps/     los cuatro planos SVG originales sin modificar
-  tests/           pruebas de unidad del modelo: node --test tests/state.test.mjs
-  pruebas/         pruebas de aceptación en navegador (Playwright)
+  tests/           pruebas de unidad: node --test tests/state.test.mjs tests/tactico.test.mjs
+  pruebas/         pruebas de aceptación en navegador (Playwright): acceptance.mjs y tactico.mjs
   herramientas/    gen_data.py: regenera data/*.json desde los SVG y la referencia
   capturas/        vistas de dirección y transmisión
 ```
@@ -108,5 +146,8 @@ Los núcleos **A** y **B** tienen indicadores separados: A · escalera, A · asc
 - Las dos ventanas deben estar en el mismo navegador y perfil. No hay sincronización por internet.
 - En móvil funciona, pero el diseño está pensado para escritorio.
 - Los glifos ✓ ✕ ◆ dependen de las fuentes del sistema; todos los estados llevan además texto.
+- Tipografía: Saira Condensed y Share Tech Mono solo se usan si están instaladas en el equipo; si no, fuentes condensadas y monoespaciadas del sistema (no se cargan fuentes externas).
+- El deshacer cubre el plano general; los cambios en escenarios no entran en el historial (se corrigen en el propio panel).
+- El motor táctico genera el SVG a partir de los datos de `js/tactico/escenarios/`; las únicas entradas del usuario son números (PV) y posiciones de casilla, y todo texto se escapa.
 
 Créditos y licencia: ver `CREDITS.md`.
