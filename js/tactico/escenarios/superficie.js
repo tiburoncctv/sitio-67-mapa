@@ -7,12 +7,13 @@ export default {
   meta:'SUPERFICIE · S01–S10 · A / B', cols:32, rows:24, margin:{b:40},
   legend:['tall','low','diff','tissue','fence','door','roll','qdoor','ag','en','npc','obj'],
   states:[
-    {key:'escena', label:'ESCENA', def:'llegada', options:[['llegada','LLEGADA'],['salida','EXTRACCIÓN · SIN JEFE'],['jefe','EXTRACCIÓN · JEFE FINAL']]},
+    {key:'escena', label:'ESCENA', def:'llegada', secret:true, options:[['llegada','LLEGADA'],['salida','EXTRACCIÓN · SIN JEFE'],['jefe','EXTRACCIÓN · JEFE FINAL']]},
     {key:'mal', label:'MALETÍN O-ÍGNEO', def:'restos', options:[['restos','ENTRE LOS RESTOS'],['rec','RECUPERADO']], enabledWhen:{escena:'jefe'}, disabledNote:'SOLO CON JEFE FINAL'},
     {key:'mod', label:'MÓDULOS ÍGNEO RESTANTES', def:'2', options:[['2','2'],['1','1'],['0','0']], enabledWhen:{escena:'jefe'}, disabledNote:'SOLO CON JEFE FINAL'},
     {key:'con1', label:'CONEXIÓN · BIOMASA B1', def:'off', options:[['off','SIN CONEXIÓN'],['on','CONECTADA']], enabledWhen:{escena:'jefe'}, disabledNote:'SOLO CON JEFE FINAL'},
     {key:'con2', label:'CONEXIÓN · BIOMASA B2', def:'off', options:[['off','SIN CONEXIÓN'],['on','CONECTADA']], enabledWhen:{escena:'jefe'}, disabledNote:'SOLO CON JEFE FINAL'},
   ],
+  hotkeys:[['escena','llegada'],['escena','salida'],['escena','jefe'],['mal',null],['mod',null],['con1',null],['con2',null]],
   starts:[
     {code:'C',c:9,r:17,when:{escena:'llegada'}}, {code:'M',c:8,r:18,when:{escena:'llegada'}}, {code:'L',c:10,r:18,when:{escena:'llegada'}}, {code:'T',c:7,r:17,when:{escena:'llegada'}},
     {code:'C',c:28,r:8,when:{escena:['salida','jefe']}},
@@ -21,15 +22,15 @@ export default {
   initialSel:'e1',
   notes:[
     'Llegada: introducción breve. Dos Errantes y un Corredor separados por la carga.',
-    'Extracción sin jefe: si la masa murió en 307, no hay segunda fase ni accidente. No forzarlos para usar este contenido.',
-    'Extracción con jefe final: el helicóptero se estrella al este del helipunto y su carga de emergencia queda entre los restos. Los agentes están en tierra; la transición no los daña ni incapacita.',
-    'La masa conserva exactamente los PV que le quedaban en 307 (anótalos en su ficha). Alimentarse no la cura ni cambia su vulnerabilidad a las armas normales.',
-    'Biomasa B1 (restos, col. 22 fila 15) y B2 (seto, col. 32 filas 17–18) quedan a 3 y 4 casillas de la huella: dentro del alcance 6. Sus conexiones se activan por separado y no atraviesan paredes.',
-    'Transmisión del transporte antes del accidente: «Llevamos el módulo de respuesta ÍGNEO. Confirmen una zona segura para entregarlo».',
-    'El maletín se descubre por observación ordinaria, sin tirada. Si el grupo consiguió antes una entrega segura, no inventar un bloqueo.',
+    {when:{escena:['salida','jefe']}, text:'Extracción sin jefe: si la masa murió en 307, no hay segunda fase ni accidente. No forzarlos para usar este contenido.'},
+    {when:{escena:'jefe'}, text:'Extracción con jefe final: el helicóptero se estrella al este del helipunto y su carga de emergencia queda entre los restos. Los agentes están en tierra; la transición no los daña ni incapacita.'},
+    {when:{escena:'jefe'}, text:'La masa conserva exactamente los PV que le quedaban en 307 (anótalos en su ficha). Alimentarse no la cura ni cambia su vulnerabilidad a las armas normales.'},
+    {when:{escena:'jefe'}, text:'Biomasa B1 (restos, col. 22 fila 15) y B2 (seto, col. 32 filas 17–18) quedan a 3 y 4 casillas de la huella: dentro del alcance 6. Sus conexiones se activan por separado y no atraviesan paredes.'},
+    {when:{escena:'jefe'}, text:'Transmisión del transporte antes del accidente: «Llevamos el módulo de respuesta ÍGNEO. Confirmen una zona segura para entregarlo».'},
+    {when:{escena:'jefe'}, text:'El maletín se descubre por observación ordinaria, sin tirada. Si el grupo consiguió antes una entrega segura, no inventar un bloqueo.'},
     'Las bajas siguen retiradas al cambiar de escena. No reponer enemigos muertos ni suministros gastados. Fragmentos solo según la ficha.',
-    'Rutas libres: B → maletín (filas 8–10), B → piloto (fila 9–10 hacia el oeste) y salida hacia S08 o E por el centro-sur. Ninguna atraviesa el cuerpo de la masa.',
-    'Fuego y humo son localizados y solo visuales: su efecto, si lo hay, lo decide dirección. El camión bloquea visión; las cajas son cobertura baja.',
+    {when:{escena:'jefe'}, text:'Rutas libres: B → maletín (filas 8–10), B → piloto (fila 9–10 hacia el oeste) y salida hacia S08 o E por el centro-sur. Ninguna atraviesa el cuerpo de la masa.'},
+    {when:{escena:'jefe'}, text:'Fuego y humo son localizados y solo visuales: su efecto, si lo hay, lo decide dirección. El camión bloquea visión; las cajas son cobertura baja.'},
   ],
   items:[
     // suelos

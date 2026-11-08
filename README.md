@@ -95,9 +95,16 @@ Selector **Escenario táctico** en la barra superior, o el botón «Abrir escena
 | Tecla | Acción |
 |---|---|
 | **L** | Muestra u oculta toda la leyenda (plano general y escenarios, dirección y transmisión) |
-| **E** | Oculta o muestra todas las amenazas del escenario, en dirección y en transmisión. Los jugadores no ven ningún aviso de que están ocultas |
+| **H** | Modo transmisión: oculta toda la interfaz y deja solo el escenario con su cabecera. Se siguen arrastrando iconos y funcionan todos los atajos. H o Esc para salir. En el plano general, H entra al modo limpio |
+| **E** | Revela u oculta las amenazas del escenario. En 203/204 solo las del lado por el que entró el grupo (estado «Marcas de entrada») |
+| **R** | En 203/204, revela u oculta las amenazas del otro lado |
+| **Mayús + 1…9** | Cambia estados sin tocar el panel. Patio: 1 llegada, 2 salida, 3 jefe final, 4 maletín, 5 módulos, 6–7 conexión de las biomasas B1 y B2. 203/204: 1 pared intacta, 2 aviso, 3 brecha, 4 alterna la entrada. 307: 1 masa, 2 C1, 3 C2, 4 secuencia, 5 descarga. 302/303: 1 válvula, 2 presión. 202: 1 módulo del registro |
+| **Alt + 1…4** | Añade una amenaza común bajo el cursor (1 Errante, 2 Corredor, 3 Escupidor, 4 Ariete), ya revelada |
+| Supr | Borra la amenaza añadida que esté enfocada o seleccionada |
 | Flechas | Mueven el icono enfocado una casilla |
-| Esc | Cancela la inserción de un agente o la herramienta activa |
+| Esc | Cancela la inserción de un agente, sale del modo transmisión o de la herramienta activa |
+
+Arrastrar un icono no lo selecciona; un icono ya seleccionado también se arrastra. El panel ya no muestra escenas u opciones futuras: en el patio la escena actual aparece sola y se cambia con Mayús + número.
 
 Los atajos no actúan mientras escribes en un campo de texto.
 

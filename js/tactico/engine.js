@@ -253,7 +253,16 @@ const LEGDEFS = `<svg width="0" height="0" style="position:absolute"><defs><patt
 
 /* ================= ESTADO POR ESCENARIO ================= */
 /** Estado vacío y saneado de un escenario. */
-export function blankScenarioState() { return { states: {}, cs: {}, pos: {}, inv: {}, agents: {}, layers: {} }; }
+export function blankScenarioState() { return { states: {}, cs: {}, pos: {}, inv: {}, agents: {}, layers: {}, extra: [] }; }
+
+/** Amenazas comunes que dirección puede añadir con Alt + número. */
+export const EXTRA_TYPES = {
+  errante: { name: 'Errante', body: 'errante', w: 1, h: 1, desc: 'Silueta humana deformada.' },
+  corredor: { name: 'Corredor', body: 'corredor', w: 1, h: 1, desc: 'Figura baja y alargada, apoyada en las cuatro extremidades.' },
+  escupidor: { name: 'Escupidor', body: 'escupidor', w: 1, h: 1, desc: 'Cuerpo hinchado con un saco en la espalda.' },
+  ariete: { name: 'Ariete', body: 'ariete', w: 2, h: 2, desc: 'Criatura maciza con una placa ósea frontal.' },
+};
+export const EXTRA_KEYS = ['errante', 'corredor', 'escupidor', 'ariete'];
 
 /* ================= VISTA ================= */
 /**
@@ -266,8 +275,8 @@ export function blankScenarioState() { return { states: {}, cs: {}, pos: {}, inv
 export function createTacticalView(opts) {
   const director = opts.mode !== 'player';
   let S = null, st = null, svg = null;
-  const ui = { sel: null, preview: false, placing: null, legend: true, grid: true, labels: true };
-  const players = () => !director || ui.preview;
+  const ui = { sel: null, preview: false, present: false, placing: null, legend: true, grid: true, labels: true, hover: null };
+  const players = () => !director || ui.preview || ui.present;
   const store = () => opts.getStore();
 
   // ------------------------------------------------------------ DOM
@@ -331,6 +340,10 @@ export function createTacticalView(opts) {
       const a = st.agents[code];
       if (a && Number.isFinite(a.c) && Number.isFinite(a.r)) list.push({ kind: 'ag', id: 'ag-' + code, code, name, c: a.c, r: a.r, desc: 'Agente de Beta-7 insertado por dirección. Arrástralo o muévelo con las flechas.' });
     }
+    (st.extra || []).forEach((x) => {
+      const t = EXTRA_TYPES[x.type]; if (!t) return;
+      list.push({ kind: 'en', id: x.id, code: x.code, name: t.name, c: x.c, r: x.r, w: t.w, h: t.h, body: t.body, face: 'e', extra: true, desc: t.desc, note: 'Amenaza añadida por dirección. Supr la elimina.' });
+    });
     (S.contacts || []).forEach((k) => {
       if (!matches(k.when)) return;
       const p = st.pos[posKey(k)];
@@ -338,7 +351,7 @@ export function createTacticalView(opts) {
     });
     return list;
   }
-  const hiddenEnemies = () => !!store().flags.hideEnemies;
+  const hiddenEnemies = () => false; // las amenazas se ocultan desrevelándolas (atajo E / R)
   function visibleInList(k) {
     if (k.kind === 'ag') return true;
     if (k.kind === 'en' && hiddenEnemies()) return false;
@@ -357,7 +370,7 @@ export function createTacticalView(opts) {
     mapRoot.classList.toggle('show-grid', ui.grid);
     mapRoot.classList.toggle('show-labels', ui.labels);
     mapRoot.classList.toggle('players', players());
-    q('chips').replaceChildren(...(director && hiddenEnemies() ? [chip('AMENAZAS OCULTAS · E')] : []), ...(ui.placing ? [chip(`INSERTANDO ${ui.placing} · ESC CANCELA`)] : []));
+    q('chips').replaceChildren(...(ui.placing ? [chip(`INSERTANDO ${ui.placing} · ESC CANCELA`)] : []));
     svg.setAttribute('viewBox', `${-m.l} ${-m.t} ${W + m.l + m.r} ${Hh + m.t + m.b}`);
     svg.setAttribute('aria-label', `Plano de combate: ${S.cols} columnas por ${S.rows} filas`);
     svg.classList.toggle('placing', !!ui.placing);
@@ -406,7 +419,7 @@ export function createTacticalView(opts) {
       let body = '';
       if (k.body && BODY[k.body]) body = BODY[k.body](x, y, w, h, { ...k, stunned: k.stunKey && st.states[k.stunKey] === k.stunVal });
       let mk = '';
-      if (k.kind === 'ag') { const a = x + w / 2, b = y + h / 2; mk += Ci(a, b, 18, 'ag-halo') + Ci(a, b, 14.5, 'ag-ring') + Tx(a, b + 6, k.code, 'ag-t', `style="font-size:${k.code.length > 1 ? 13 : 17}px"`) + Ci(a, b, 20, 'focusring'); }
+      if (k.kind === 'ag') { const a = x + w / 2, b = y + h / 2; mk += Ci(a, b, 18, 'ag-halo') + Ci(a, b, 14.5, 'ag-ring') + Tx(a, b + 0.5, k.code, 'ag-t', `dominant-baseline="central" style="font-size:${k.code.length > 1 ? 13 : 17}px"`) + Ci(a, b, 20, 'focusring'); }
       else if (k.kind === 'en') { mk += R(x + 2, y + 2, w - 4, h - 4, 'foot-en'); const tw = 8 + k.code.length * 8; mk += R(x + 2, y - 14, tw, 15, hidden ? 'tag-hid' : 'tag-en') + Tx(x + 2 + tw / 2, y - 2, k.code, hidden ? 'tag-hid-t' : 'tag-en-t'); if (hidden) mk += Tx(x + tw + 8, y - 3, 'OCULTO', 'lb-dir', 'style="text-anchor:start;font-size:8.5px"'); mk += R(x - 1, y - 1, w + 2, h + 2, 'focusring') + `<g class="g-labels">${Tx(x + w / 2, y + h + 12, k.name.toUpperCase(), 'name-tag name-en')}</g>`; }
       else if (k.kind === 'npc') { const tw = 8 + k.code.length * 8; mk += R(x + 1, y + 1, w - 2, h - 2, '', 'fill="none" stroke="#e6dc4f" stroke-dasharray="2 3" opacity=".8"') + R(x + w - tw - 1, y - 13, tw, 15, 'tag-npc') + Tx(x + w - tw / 2 - 1, y - 1, k.code, 'tag-npc-t') + R(x - 1, y - 1, w + 2, h + 2, 'focusring'); if (hidden) mk += Tx(x, y - 3, 'OCULTO', 'lb-dir', 'style="text-anchor:start;font-size:8.5px"'); mk += `<g class="g-labels">${Tx(x + w / 2, y + h + 12, k.name.toUpperCase(), 'name-tag name-npc')}</g>`; }
       else if (k.kind === 'obj' && k.mark) {
@@ -426,6 +439,7 @@ export function createTacticalView(opts) {
         if (label) { const tw = 6 + label.length * 6.6; const tx = k.tag === 'w' ? x - tw + 6 : x + w - 6; mk += R(tx, y - 6, tw, 13, avail > 0 ? 'qty-tag' : 'qty-tag gone') + Tx(tx + tw / 2, y + 4, label, 'qty-t' + (avail > 0 ? '' : ' gone')); }
         mk += R(x - 1, y - 1, w + 2, h + 2, 'focusring') + R(x, y, w, h, '', 'fill="transparent"'); }
       const mv = movable(k);
+      if (mv) mk = R(x, y, w, h, '', 'fill="transparent"') + mk;
       const cls = 'tok' + (hidden && !players() && !always ? ' unrev' : '') + (down ? ' downed' : '') + (mv ? ' movable' : '');
       const al = `${k.code} · ${kindLabel(k)} · ${k.name}${k.kind === 'item' ? ` · disponibles ${invOf(k)} de ${k.qty}` : ''} · columna ${k.c}, fila ${k.r}${mv ? ' · flechas para mover' : ''}`;
       tokens.push({ layer, html: `<g class="${cls}" tabindex="0" role="button" data-id="${esc(k.id)}" ${mv ? 'data-drag="1"' : ''} aria-label="${esc(al)}">${body}${mk}${down ? P(`M${x + 6} ${y + 6} L${x + w - 6} ${y + h - 6} M${x + w - 6} ${y + 6} L${x + 6} ${y + h - 6}`, 'fzd', 'style="stroke:#ff8f8f;stroke-width:2"') : ''}</g>` });
@@ -442,7 +456,7 @@ export function createTacticalView(opts) {
     out += g('mobiliario', L_.mobiliario) + g('tejido', L_.tejido) + g('cambios', L_.cambios);
     out += `<g class="g-labels" aria-hidden="true">${L_.labels.join('')}</g><g class="g-dir" aria-hidden="true">${L_.dir.join('')}</g>`;
     ['objetivos', 'personajes', 'contactos'].forEach((l) => { out += g(l, L_[l]) + tokens.filter((t) => t.layer === l).map((t) => t.html).join(''); });
-    out += '<g class="sel" aria-hidden="true"></g>';
+    out += '<g class="sel" aria-hidden="true" pointer-events="none"></g>';
     out += `<rect x="-6" y="-6" width="${W + 12}" height="${Hh + 12}" fill="none" stroke="rgba(220,230,228,.18)" pointer-events="none"/>`;
     out += P(`M-6 -6 h22 M-6 -6 v22 M${W + 6} -6 h-22 M${W + 6} -6 v22 M-6 ${Hh + 6} h22 M-6 ${Hh + 6} v-22 M${W + 6} ${Hh + 6} h-22 M${W + 6} ${Hh + 6} v-22`, 'frame-tick');
     svg.innerHTML = out;
@@ -456,32 +470,99 @@ export function createTacticalView(opts) {
   function cellAt(e) { const p = toSvg(e); return { c: Math.floor(p.x / C) + 1, r: Math.floor(p.y / C) + 1 }; }
   function bindTokens() {
     svg.querySelectorAll('.tok').forEach((el) => {
-      el.addEventListener('click', (e) => { if (ui.placing) return; e.stopPropagation(); if (el.dataset.dragged) { delete el.dataset.dragged; return; } select(el.dataset.id); });
+      el.addEventListener('click', (e) => { if (ui.placing) return; e.stopPropagation(); if (dragJustEnded) return; select(el.dataset.id); });
       el.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(el.dataset.id); return; }
+        const k = allContacts().find((c) => c.id === el.dataset.id);
+        if ((e.key === 'Delete' || e.key === 'Backspace') && k && k.extra) { e.preventDefault(); e.stopPropagation(); removeExtra(k.id); return; }
         const mv = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
-        if (mv && el.dataset.drag) { e.preventDefault(); e.stopPropagation(); const k = allContacts().find((c) => c.id === el.dataset.id); if (k) { ui.sel = k.id; setPos(k, k.c + mv[0], k.r + mv[1]); } }
+        if (mv && el.dataset.drag && k) { e.preventDefault(); e.stopPropagation(); setPos(k, k.c + mv[0], k.r + mv[1]); }
       });
       if (!el.dataset.drag) return;
       el.addEventListener('pointerdown', (e) => {
         if (e.button !== 0 || ui.placing) return;
         const k = allContacts().find((c) => c.id === el.dataset.id); if (!k) return;
-        e.stopPropagation();
-        const p0 = toSvg(e); let moved = false; try { el.setPointerCapture(e.pointerId); } catch { /* ignorar */ }
-        const mv = (ev) => { const p = toSvg(ev), dx = p.x - p0.x, dy = p.y - p0.y; if (!moved && Math.hypot(dx, dy) < 6) return; moved = true; el.setAttribute('transform', `translate(${dx} ${dy})`); el.classList.add('dragging'); };
-        const up = (ev) => { el.removeEventListener('pointermove', mv); el.removeEventListener('pointerup', up); el.removeEventListener('pointercancel', up);
-          if (moved) { const p = toSvg(ev); el.dataset.dragged = '1'; ui.sel = k.id; setPos(k, k.c + Math.round((p.x - p0.x) / C), k.r + Math.round((p.y - p0.y) / C)); } };
-        el.addEventListener('pointermove', mv); el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
+        e.stopPropagation(); e.preventDefault();
+        const p0 = toSvg(e); let moved = false;
+        // escucha en la ventana: el arrastre no depende de que el puntero siga sobre el icono
+        const mv = (ev) => { if (ev.pointerId !== e.pointerId) return; const p = toSvg(ev), dx = p.x - p0.x, dy = p.y - p0.y; if (!moved && Math.hypot(dx, dy) < 6) return; moved = true; el.setAttribute('transform', `translate(${dx} ${dy})`); el.classList.add('dragging'); };
+        const up = (ev) => {
+          if (ev.pointerId !== e.pointerId) return;
+          window.removeEventListener('pointermove', mv); window.removeEventListener('pointerup', up); window.removeEventListener('pointercancel', up);
+          if (!moved) return;
+          dragJustEnded = true; setTimeout(() => { dragJustEnded = false; }, 0);
+          if (ev.type === 'pointercancel') { render(); return; }
+          const p = toSvg(ev); setPos(k, k.c + Math.round((p.x - p0.x) / C), k.r + Math.round((p.y - p0.y) / C), false);
+        };
+        window.addEventListener('pointermove', mv); window.addEventListener('pointerup', up); window.addEventListener('pointercancel', up);
       });
     });
   }
+  let dragJustEnded = false;
   function clampCell(k, c, r) { return { c: Math.max(1, Math.min(S.cols - (k.w || 1) + 1, c)), r: Math.max(1, Math.min(S.rows - (k.h || 1) + 1, r)) }; }
-  function setPos(k, c, r) {
+  function setPos(k, c, r, focus = true) {
     ({ c, r } = clampCell(k, c, r));
     if (k.kind === 'ag') st.agents[k.code] = { c, r };
+    else if (k.extra) { const x = st.extra.find((e) => e.id === k.id); if (x) { x.c = c; x.r = r; } }
     else { const base = (S.contacts || []).find((o) => o.id === k.id); const key = posKey(k); if (base && base.c === c && base.r === r) delete st.pos[key]; else st.pos[key] = { c, r }; }
     changed(); render(); renderDetail(); renderLists();
-    svg.querySelector(`.tok[data-id="${CSS.escape(k.id)}"]`)?.focus({ preventScroll: true });
+    if (focus) svg.querySelector(`.tok[data-id="${CSS.escape(k.id)}"]`)?.focus({ preventScroll: true });
+  }
+  function removeExtra(id) { st.extra = (st.extra || []).filter((x) => x.id !== id); delete st.cs[id]; if (ui.sel === id) ui.sel = null; changed(); refresh(); }
+  function freeCellNear(c0, r0, w = 1, h = 1) {
+    const occ = new Set(); allContacts().forEach((k) => { for (let c = k.c; c < k.c + (k.w || 1); c++) for (let r = k.r; r < k.r + (k.h || 1); r++) occ.add(`${c},${r}`); });
+    S.items.filter((i) => i.t === 'obj' && matches(i.when) && OBJ[i.k] && OBJ[i.k].c !== 'deco').forEach((o) => { for (let c = o.c; c < o.c + (o.w || 1); c++) for (let r = o.r; r < o.r + (o.h || 1); r++) occ.add(`${c},${r}`); });
+    const fits = (c, r) => { if (c < 1 || r < 1 || c + w - 1 > S.cols || r + h - 1 > S.rows) return false; for (let i = c; i < c + w; i++) for (let j = r; j < r + h; j++) if (occ.has(`${i},${j}`)) return false; return true; };
+    for (let d = 0; d < Math.max(S.cols, S.rows); d++) for (let dc = -d; dc <= d; dc++) for (let dr = -d; dr <= d; dr++) { if (Math.max(Math.abs(dc), Math.abs(dr)) !== d) continue; if (fits(c0 + dc, r0 + dr)) return { c: c0 + dc, r: r0 + dr }; }
+    return { c: Math.max(1, Math.min(S.cols - w + 1, c0)), r: Math.max(1, Math.min(S.rows - h + 1, r0)) };
+  }
+  function addEnemy(type) {
+    const t = EXTRA_TYPES[type]; if (!t || !S) return null;
+    const used = allContacts().map((k) => /^E(\d+)$/.exec(k.code)).filter(Boolean).map((m) => +m[1]);
+    const n = (used.length ? Math.max(...used) : 0) + 1;
+    const base = ui.hover || { c: Math.ceil(S.cols / 2), r: Math.ceil(S.rows / 2) };
+    const cell = freeCellNear(base.c, base.r, t.w, t.h);
+    const id = 'x' + Date.now().toString(36).slice(-6) + n;
+    if (!st.extra) st.extra = [];
+    st.extra.push({ id, type, code: 'E' + n, c: cell.c, r: cell.r });
+    st.cs[id] = { rev: true, down: false };
+    changed(); refresh();
+    svg.querySelector(`.tok[data-id="${id}"]`)?.focus({ preventScroll: true });
+    return `${t.name} E${n} añadido en ${cell.c} · ${cell.r}`;
+  }
+  /** E: amenazas del grupo principal (o del lado de entrada); R: las del otro lado, si el escenario tiene lados. */
+  function toggleEnemies(which) {
+    if (!S) return null;
+    const all = allContacts().filter((k) => k.kind === 'en' && !(st.cs[k.id] || {}).down);
+    let group = all, label = '';
+    const sd = S.enemySides;
+    if (sd) {
+      const entry = st.states[sd.key]; const side = which === 'secondary' ? sd.sides.find((x) => x !== entry) : entry;
+      group = all.filter((k) => sd.sideOf(k) === side); label = ` · lado ${side}`;
+    } else if (which === 'secondary') return null;
+    if (!group.length) return `Sin amenazas${label}`;
+    const reveal = group.some((k) => !(st.cs[k.id] || {}).rev);
+    group.forEach((k) => { st.cs[k.id] = { rev: reveal, down: !!(st.cs[k.id] || {}).down }; });
+    changed(); refresh();
+    return `${reveal ? 'Amenazas visibles' : 'Amenazas ocultas'}${label}`;
+  }
+  /** Mayús + número cambia estados; Alt + número añade amenazas comunes. Devuelve un mensaje o null. */
+  function hotkey(e) {
+    if (!S || e.ctrlKey || e.metaKey) return null;
+    const m = /^Digit([1-9])$/.exec(e.code); if (!m) return null;
+    const n = +m[1];
+    if (e.altKey && !e.shiftKey) { const type = EXTRA_KEYS[n - 1]; return type ? addEnemy(type) : null; }
+    if (e.shiftKey && !e.altKey) {
+      const hk = (S.hotkeys || [])[n - 1]; if (!hk) return null;
+      const [key, val] = hk; const grp = (S.states || []).find((g) => g.key === key); if (!grp) return null;
+      if (grp.enabledWhen && !matches(grp.enabledWhen)) return null;
+      let next = val;
+      if (next == null) { const i = grp.options.findIndex((o) => o[0] === st.states[key]); next = grp.options[(i + 1) % grp.options.length][0]; }
+      st.states[key] = next; changed(); refresh();
+      const opt = grp.options.find((o) => o[0] === next);
+      return `${grp.label}: ${opt ? opt[1] : next}`;
+    }
+    return null;
   }
   // inserción manual de Beta-7
   function entryCell() {
@@ -546,6 +627,7 @@ export function createTacticalView(opts) {
       html += `<div class="acts"><button type="button" class="act" data-act="rev" aria-pressed="${!!cs.rev}">${cs.rev ? '✓ VISIBLE PARA JUGADORES' : 'REVELAR A JUGADORES'}</button>`;
       if (k.kind !== 'obj') html += `<button type="button" class="act" data-act="down" aria-pressed="${!!cs.down}">${cs.down ? '✕ BAJA / RETIRADO' : 'MARCAR BAJA'}</button>`;
       if (k.moved) html += '<button type="button" class="act" data-act="reset">RESTABLECER POSICIÓN</button>';
+      if (k.extra) html += '<button type="button" class="act" data-act="delx">ELIMINAR (SUPR)</button>';
       html += '</div>';
     }
     if (movable(k)) html += '<p class="hint">Arrastra el icono o enfócalo y usa las flechas para colocarlo.</p>';
@@ -564,6 +646,7 @@ export function createTacticalView(opts) {
       else if (a === 'plus') st.inv[k.id] = Math.min(k.qty, invOf(k) + 1);
       else if (a === 'reset') delete st.pos[posKey(k)];
       else if (a === 'remove') { delete st.agents[k.code]; ui.sel = null; }
+      else if (a === 'delx') { removeExtra(k.id); return; }
       changed(); refresh();
     }));
     const hp = el.querySelector('.hp-in');
@@ -611,8 +694,10 @@ export function createTacticalView(opts) {
     const groups = S.states || [];
     q('sec-states').hidden = !groups.length;
     const el = q('states');
-    el.innerHTML = groups.map((gp) => { const dis = gp.enabledWhen && !matches(gp.enabledWhen);
-      return `<div class="stgroup"><div class="stlabel">${esc(gp.label)}${dis ? ' · ' + esc(gp.disabledNote || 'NO APLICA') : ''}</div><div class="segb" role="group" aria-label="${esc(gp.label)}">${gp.options.map(([v, l]) => `<button type="button" data-k="${esc(gp.key)}" data-v="${esc(v)}" aria-pressed="${st.states[gp.key] === v}" ${dis ? 'disabled' : ''}>${esc(l)}</button>`).join('')}</div></div>`; }).join('');
+    el.innerHTML = groups.map((gp) => {
+      if (gp.enabledWhen && !matches(gp.enabledWhen)) return ''; // no anticipar estados que aún no aplican
+      const opts = gp.secret ? gp.options.filter((o) => o[0] === st.states[gp.key]) : gp.options;
+      return `<div class="stgroup"><div class="stlabel">${esc(gp.label)}</div><div class="segb" role="group" aria-label="${esc(gp.label)}">${opts.map(([v, l]) => `<button type="button" data-k="${esc(gp.key)}" data-v="${esc(v)}" aria-pressed="${st.states[gp.key] === v}">${esc(l)}</button>`).join('')}</div></div>`; }).join('');
     el.querySelectorAll('button').forEach((b) => b.addEventListener('click', () => { st.states[b.dataset.k] = b.dataset.v; changed(); refresh(); }));
   }
   function renderLayers() {
@@ -627,9 +712,10 @@ export function createTacticalView(opts) {
     q('meta').textContent = S.meta || '';
     q('foot').textContent = `1 CASILLA ≈ 1,5 M · CUADRÍCULA ${S.cols} × ${S.rows} · ESCENARIO DE COMBATE A ESCALA, INDEPENDIENTE DEL PLANO GENERAL`;
     q('legend').innerHTML = (S.legend || ['wall', 'tall', 'low', 'diff', 'tissue', 'door', 'ag', 'en', 'obj']).map((k) => `<li>${LEG[k] || ''}</li>`).join('');
-    if (panel) q('notes').innerHTML = (S.notes || []).map((n) => `<li>${esc(n)}</li>`).join('');
+
   }
-  function refresh() { render(); renderDetail(); renderLists(); renderAgents(); renderStates(); renderLayers(); }
+  function renderNotes() { if (panel) q('notes').innerHTML = (S.notes || []).filter((n) => typeof n === 'string' || matches(n.when)).map((n) => `<li>${esc(typeof n === 'string' ? n : n.text)}</li>`).join(''); }
+  function refresh() { render(); renderDetail(); renderLists(); renderAgents(); renderStates(); renderLayers(); renderNotes(); }
 
   // ------------------------------------------------------------ controles del panel
   if (panel) {
@@ -638,8 +724,8 @@ export function createTacticalView(opts) {
     tg('t-labels', (v) => { ui.labels = v; render(); });
     tg('t-preview', (v) => { ui.preview = v; panel.classList.toggle('players', v); refresh(); });
   }
-  svg.addEventListener('mousemove', (e) => { if (!S) return; const { c, r } = cellAt(e); q('cell').textContent = (c >= 1 && c <= S.cols && r >= 1 && r <= S.rows) ? `COL ${c} · FILA ${r}` : 'COL — · FILA —'; });
-  svg.addEventListener('mouseleave', () => { q('cell').textContent = 'COL — · FILA —'; });
+  svg.addEventListener('mousemove', (e) => { if (!S) return; const { c, r } = cellAt(e); ui.hover = (c >= 1 && c <= S.cols && r >= 1 && r <= S.rows) ? { c, r } : null; q('cell').textContent = (c >= 1 && c <= S.cols && r >= 1 && r <= S.rows) ? `COL ${c} · FILA ${r}` : 'COL — · FILA —'; });
+  svg.addEventListener('mouseleave', () => { ui.hover = null; q('cell').textContent = 'COL — · FILA —'; });
 
   // ------------------------------------------------------------ API
   return {
@@ -654,6 +740,9 @@ export function createTacticalView(opts) {
     /** Vuelve a leer el estado (p. ej. tras recibirlo de otra ventana). */
     refresh() { if (!S) return; st = store().scen(S.id); hydrate(); refresh(); },
     setLegend(on) { ui.legend = !!on; if (S) render(); },
+    setPresent(on) { ui.present = !!on; mapRoot.classList.toggle('present', ui.present); if (S) refresh(); },
+    toggleEnemies, addEnemy, hotkey,
+    get hasSides() { return !!(S && S.enemySides); },
     /** Ficha pública de un id (para la vista de jugadores); null si no es visible. */
     publicCard(id) { if (!S || !id) return null; const k = allContacts().find((c) => c.id === id); if (!k || !visibleInList(k)) return null; return detailHTML(k, true); },
     setRemoteSelection(id) { ui.sel = id; if (S) drawSel(); },

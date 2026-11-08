@@ -9,6 +9,7 @@ export default {
     {key:'v', label:'VÁLVULA V (302)', def:'off', options:[['off','SIN OPERAR'],['on','OPERADA']]},
     {key:'p', label:'PANEL P (303)', def:'off', options:[['off','SIN OPERAR'],['on','OPERADO']]},
   ],
+  hotkeys:[['v',null],['p',null]],
   starts:[ {code:'C',c:8,r:17}, {code:'M',c:9,r:17}, {code:'L',c:7,r:17}, {code:'T',c:10,r:17} ],
   initialSel:'e1',
   notes:[

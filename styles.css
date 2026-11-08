@@ -282,3 +282,9 @@ kbd { font-family: var(--mono); font-size: 11px; border: 1px solid var(--line2);
 .player.tac-mode:not(:has(.pcard:not([hidden]))) { grid-template-columns: minmax(0, 1fr); }
 body:not(.tac-mode) .scen-only { display: none !important; }
 .tac-card { border: 0; }
+
+/* H · modo transmisión: solo queda el escenario con su cabecera */
+body.present .topbar, body.present .toolbar, body.present .panel,
+body.present .map-wrap > :not(.tac-host) { display: none !important; }
+body.present .director { grid-template-rows: minmax(0, 1fr); }
+body.present .workspace { grid-template-columns: minmax(0, 1fr); }

@@ -70,10 +70,10 @@ await page.keyboard.press('l'); await pl.waitForTimeout(200);
 const legBack = !(await pl.$eval('#player-tac .tac', (n) => n.classList.contains('no-legend')));
 check(6, 'Atajo L oculta y muestra toda la leyenda (dirección y transmisión)', legHidden && legBack);
 await page.keyboard.press('e'); await pl.waitForTimeout(300);
-const enHiddenP = await plTok('.tok[data-id="mc"]'); const enHiddenD = await page.$$eval('#tac-host .tok[data-id="mc"]', (n) => n.length);
+const enHiddenP = await plTok('.tok[data-id="mc"]'); const enUnrevD = await page.$$eval('#tac-host .tok.unrev[data-id="mc"]', (n) => n.length);
 const chipP = await pl.$$eval('#player-tac .t-chips .chip', (n) => n.length);
 await page.keyboard.press('e'); await pl.waitForTimeout(300);
-check(7, 'Atajo E oculta y muestra las amenazas sin delatarlo en transmisión', enHiddenP === 0 && enHiddenD === 0 && chipP === 0 && (await plTok('.tok[data-id="mc"]')) === 1);
+check(7, 'Atajo E oculta y revela las amenazas (dirección las sigue viendo atenuadas)', enHiddenP === 0 && enUnrevD === 1 && chipP === 0 && (await plTok('.tok[data-id="mc"]')) === 1);
 
 // 8 · armería
 await open('armeria');
@@ -85,10 +85,12 @@ check(8, 'Armería: 14 grupos, ÍGNEO presente y retirada manual', groups === 14
 
 // 9 · patio: jefe final y maletín oculto
 await open('superficie');
-await page.click('#tac-panel [data-k="escena"][data-v="jefe"]'); await pl.waitForTimeout(300);
+const escenasAntes = await page.$$eval('#tac-panel [data-k="escena"]', (n) => n.map((x) => x.dataset.v).join());
+await page.click('#tac-host .t-title'); await page.keyboard.press('Shift+Digit3'); await pl.waitForTimeout(300);
 const malDir = await page.$$eval('#tac-host .tok[data-id="oig"]', (n) => n.length); const malPl = await plTok('.tok[data-id="oig"]');
-const llegada = await page.$$eval('#tac-panel [data-k="escena"]', (n) => n.map((x) => x.dataset.v).join());
-check(9, 'Patio: llegada conservada y jefe final con maletín oculto a jugadores', llegada === 'llegada,salida,jefe' && malDir === 1 && malPl === 0);
+const escenasJefe = await page.$$eval('#tac-panel [data-k="escena"]', (n) => n.map((x) => x.dataset.v).join());
+const notaJefe = await page.$eval('#tac-panel', (n) => n.textContent.includes('Extracción con jefe final'));
+check(9, 'Patio: Mayús+3 pasa al jefe final sin que el panel delate las otras escenas', escenasAntes === 'llegada' && escenasJefe === 'jefe' && malDir === 1 && malPl === 0 && notaJefe, `antes=${escenasAntes} después=${escenasJefe}`);
 
 // 10 · persistencia
 await page.reload(); await page.waitForSelector('#director:not([hidden])'); await page.waitForTimeout(100);
@@ -101,7 +103,51 @@ await page.click('[data-floor="N2"]'); await pl.waitForTimeout(300);
 const back = await page.$eval('#tac-host', (n) => n.hidden) && await pl.$eval('#player-tac', (n) => n.hidden);
 check(11, 'Pulsar una planta vuelve al plano general en dirección y transmisión', back);
 
-check(12, 'Sin errores de consola', !errs.length, errs.slice(0, 3).join(' | '));
+// 12 · arrastrar un icono ya seleccionado; arrastrar no selecciona
+await open('camara');
+await page.click('#tac-panel .cbtn[data-id="ag-L"]'); await page.waitForTimeout(50);
+const selBefore = await page.$$eval('#tac-host .sel', (n) => n.length);
+t = await T(); const L0 = t.scen.camara.agents.L;
+let p0 = await cellPoint(L0.c, L0.r), p1 = await cellPoint(L0.c + 2, L0.r + 4);
+await page.mouse.move(p0.x, p0.y); await page.mouse.down(); await page.mouse.move(p1.x, p1.y, { steps: 6 }); await page.mouse.up(); await page.waitForTimeout(60);
+t = await T(); const L1 = t.scen.camara.agents.L;
+await page.keyboard.press('Escape'); await page.click('#tac-host .t-title'); await page.waitForTimeout(40);
+const T0 = t.scen.camara.agents.T; p0 = await cellPoint(T0.c, T0.r); p1 = await cellPoint(T0.c, T0.r + 3);
+const selIdle = await page.$$eval('#tac-host .sel', (n) => n.length);
+await page.mouse.move(p0.x, p0.y); await page.mouse.down(); await page.mouse.move(p1.x, p1.y, { steps: 6 }); await page.mouse.up(); await page.waitForTimeout(60);
+t = await T(); const selAfter = await page.$$eval('#tac-host .sel', (n) => n.length); const selId = await page.evaluate(() => document.querySelector('#tac-panel .cbtn[aria-pressed="true"], #tac-panel .cbtn.on')?.dataset.id);
+check(12, 'Un icono seleccionado se arrastra y arrastrar no selecciona', selBefore === 1 && L1.c === L0.c + 2 && L1.r === L0.r + 4 && t.scen.camara.agents.T.r === T0.r + 3 && selAfter === selIdle && selId !== 'ag-T', `L ${JSON.stringify(L0)}→${JSON.stringify(L1)} sel antes=${selBefore} reposo=${selIdle} tras arrastre=${selAfter} seleccionado=${selId}`);
+
+// 13 · Alt+1..4 añade amenazas comunes bajo el cursor; Supr las borra
+const hc = await cellPoint(4, 4); await page.mouse.move(hc.x, hc.y);
+await page.keyboard.press('Alt+Digit1'); await page.keyboard.press('Alt+Digit4'); await pl.waitForTimeout(250);
+t = await T(); const ex = t.scen.camara.extra;
+const exPl = await pl.$$eval('#player-tac .tok', (n) => n.filter((x) => /^x/.test(x.dataset.id)).length);
+await page.focus(`#tac-host .tok[data-id="${ex[0].id}"]`); await page.keyboard.press('Delete'); await page.waitForTimeout(60);
+t = await T();
+check(13, 'Alt+1 añade un Errante bajo el cursor (visible en transmisión), Alt+4 un Ariete y Supr lo borra', ex.length === 2 && ex[0].type === 'errante' && ex[0].c === 4 && ex[0].r === 4 && ex[1].type === 'ariete' && exPl === 2 && t.scen.camara.extra.length === 1, JSON.stringify(ex));
+
+// 14 · H oculta toda la interfaz salvo la cabecera; se puede seguir arrastrando
+await page.click('#tac-host .t-title'); await page.keyboard.press('h'); await page.waitForTimeout(150);
+const vis = (sel) => page.$eval(sel, (n) => !!(n.offsetWidth || n.offsetHeight));
+const uiHidden = !(await vis('.topbar')) && !(await vis('.toolbar')) && !(await vis('#panel')) && await vis('#tac-host .t-head');
+const unrevShown = await page.$$eval('#tac-host .tok.unrev', (n) => n.length);
+t = await T(); const C0 = t.scen.camara.agents.C; p0 = await cellPoint(C0.c, C0.r); p1 = await cellPoint(C0.c + 1, C0.r);
+await page.mouse.move(p0.x, p0.y); await page.mouse.down(); await page.mouse.move(p1.x, p1.y, { steps: 5 }); await page.mouse.up(); await page.waitForTimeout(60);
+t = await T(); const dragged = t.scen.camara.agents.C.c === C0.c + 1;
+await page.keyboard.press('h'); await page.waitForTimeout(100);
+check(14, 'H: modo transmisión sin interfaz, sin amenazas ocultas y con arrastre', uiHidden && unrevShown === 0 && dragged && await vis('.topbar'), `ui=${uiHidden} ocultas=${unrevShown} arrastre=${dragged}`);
+
+// 15 · 203/204: E revela el lado de entrada y R el otro
+await open('laboratorios');
+const labRev = async () => { const s = (await T()).scen.laboratorios.cs || {}; return ['e1', 'e2', 'e3'].map((i) => (s[i] || {}).rev ? 1 : 0).join(''); };
+const r0 = await labRev();
+await page.click('#tac-host .t-title'); await page.keyboard.press('e'); const r1 = await labRev();
+await page.keyboard.press('r'); const r2 = await labRev();
+await page.keyboard.press('Shift+Digit4'); await page.keyboard.press('e'); const r3 = await labRev();
+check(15, '203/204: E revela solo el lado de entrada y R el del otro lado', r0 === '000' && r1 === '100' && r2 === '111' && r3 === '100', `inicio=${r0} E=${r1} R=${r2} entrada 204 + E=${r3}`);
+
+check(16, 'Sin errores de consola', !errs.length, errs.slice(0, 3).join(' | '));
 await browser.close();
 const fail = results.filter((r) => !r.ok).length;
 console.log(`\n${results.length - fail}/${results.length} comprobaciones aprobadas`);

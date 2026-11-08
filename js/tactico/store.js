@@ -1,6 +1,6 @@
 // Estado de los escenarios tácticos: guardado propio en localStorage y saneado al leer o importar.
 // Módulo puro (sin DOM salvo localStorage) para poder probarlo con Node.
-import { blankScenarioState, AGENTS } from './engine.js';
+import { blankScenarioState, AGENTS, EXTRA_TYPES } from './engine.js';
 
 export const TAC_KEY = 'sitio67:tactico:v1';
 export const TAC_VERSION = 1;
@@ -27,6 +27,7 @@ export function sanitizeStore(raw, scenarioIds) {
     if (isObj(s.inv)) for (const [k, v] of Object.entries(s.inv)) if (KEY_RE.test(k) && Number.isInteger(v) && v >= 0 && v <= 999) t.inv[k] = v;
     if (isObj(s.agents)) for (const [k, v] of Object.entries(s.agents)) if (AGENT_CODES.has(k) && isCell(v)) t.agents[k] = { c: v.c, r: v.r };
     if (isObj(s.layers)) for (const [k, v] of Object.entries(s.layers)) if (KEY_RE.test(k) && typeof v === 'boolean') t.layers[k] = v;
+    if (Array.isArray(s.extra)) for (const x of s.extra.slice(0, 60)) if (isObj(x) && /^x[a-z0-9]{1,16}$/.test(x.id) && EXTRA_TYPES[x.type] && /^E\d{1,3}$/.test(x.code) && isCell(x)) t.extra.push({ id: x.id, type: x.type, code: x.code, c: x.c, r: x.r });
     out.scen[id] = t;
   }
   return out;
